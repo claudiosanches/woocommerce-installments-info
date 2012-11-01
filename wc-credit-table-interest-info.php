@@ -15,6 +15,7 @@
  * TODO:
  * Adicionar opções de design.
  * Formatar corretamente a tabela com as opções de design.
+ * Escrever readme.txt
  */
 
 /**
