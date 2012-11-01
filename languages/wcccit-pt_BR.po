@@ -1,0 +1,192 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WooCommerce Credit Card Interest Table v1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2012-11-01 02:42:45+0000\n"
+"Last-Translator: Claudio Sanches <contato@claudiosmweb.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: Portuguese\n"
+"X-Poedit-Country: BRAZIL\n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: ../\n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#. translators: plugin header field 'Name'
+#: wc-credit-table-interest-info.php:0
+#@ wcccit
+msgid "WooCommerce Credit Card Interest Table"
+msgstr "WooCommerce Credit Card Interest Table"
+
+#. translators: plugin header field 'PluginURI'
+#. translators: plugin header field 'AuthorURI'
+#: wc-credit-table-interest-info.php:0
+#@ wcccit
+msgid "http://www.claudiosmweb.com/"
+msgstr "http://www.claudiosmweb.com/"
+
+#. translators: plugin header field 'Description'
+#: tinymce/dialog.php:7
+#: wc-credit-table-interest-info.php:0
+#: wc-credit-table-interest-info.php:103
+#@ wcccit
+msgid "Credit Card Interest Table"
+msgstr "Credit Card Interest Table"
+
+#. translators: plugin header field 'Author'
+#: wc-credit-table-interest-info.php:0
+#@ wcccit
+msgid "claudiosanches, rstancato"
+msgstr "claudiosanches, rstancato"
+
+#. translators: plugin header field 'Version'
+#: wc-credit-table-interest-info.php:0
+#@ wcccit
+msgid "1.0"
+msgstr "1.0"
+
+#: wc-credit-table-interest-info.php:123
+#@ wcccit
+msgid "Settings"
+msgstr "Configurações"
+
+#: wc-credit-table-interest-info.php:123
+#@ wcccit
+msgid "Design"
+msgstr "Design"
+
+#: tinymce/dialog.php:83
+#: wc-credit-table-interest-info.php:172
+#@ wcccit
+msgid "Number of parcels"
+msgstr "Número de parcelas"
+
+#: tinymce/dialog.php:87
+#: wc-credit-table-interest-info.php:185
+#@ wcccit
+msgid "Parcel minimum"
+msgstr "Quantidade mínima de parcelas"
+
+#: tinymce/dialog.php:91
+#: wc-credit-table-interest-info.php:198
+#@ wcccit
+msgid "iota"
+msgstr "Valor mínimo da parcela"
+
+#: tinymce/dialog.php:102
+#: wc-credit-table-interest-info.php:224
+#@ wcccit
+msgid "Interest"
+msgstr "Juros"
+
+#: tinymce/dialog.php:106
+#: wc-credit-table-interest-info.php:237
+#@ wcccit
+msgid "Calculation type"
+msgstr "Tipo de calculo"
+
+#: tinymce/dialog.php:108
+#: wc-credit-table-interest-info.php:246
+#@ wcccit
+msgid "Amortization schedule"
+msgstr "Tabela Price"
+
+#: tinymce/dialog.php:109
+#: wc-credit-table-interest-info.php:247
+#@ wcccit
+msgid "Simple interest"
+msgstr "Juros simples"
+
+#: wc-credit-table-interest-info.php:272
+#@ wcccit
+msgid "Table Design"
+msgstr "Opções de design da tabela"
+
+#: wc-credit-table-interest-info.php:279
+#@ wcccit
+msgid "Display in"
+msgstr "Mostrar em"
+
+#: wc-credit-table-interest-info.php:288
+#@ wcccit
+msgid "Product bottom"
+msgstr "No final da página do produto"
+
+#: wc-credit-table-interest-info.php:289
+#@ wcccit
+msgid "Before product tab"
+msgstr "Antes das abas do produto"
+
+#: wc-credit-table-interest-info.php:290
+#@ wcccit
+msgid "Product tab"
+msgstr "Como aba do produto"
+
+#: wc-credit-table-interest-info.php:291
+#@ wcccit
+msgid "No display"
+msgstr "Em nenhum local (Usar apenas como Shortcode)"
+
+#: wc-credit-table-interest-info.php:487
+#, php-format
+#@ wcccit
+msgid "%sx of %s without interest"
+msgstr "%sx de %s sem juros"
+
+#: wc-credit-table-interest-info.php:489
+#, php-format
+#@ wcccit
+msgid "%sx of %s with interest"
+msgstr "%sx de %s com juros"
+
+#: wc-credit-table-interest-info.php:500
+#, php-format
+#@ wcccit
+msgid "Interest of %s%s per month"
+msgstr "Juros de %s%s por mês"
+
+#: wc-credit-table-interest-info.php:614
+#, php-format
+#@ wcccit
+msgid "WooCommerce Credit Card Interest Table depends on <a href=\"%s\">WooCommerce</a> to work!"
+msgstr "WooCommerce Credit Card Interest Table necessita do <a href=\"%s\">WooCommerce</a> para funcionar!"
+
+#: wc-credit-table-interest-info.php:165
+#@ wcccit
+msgid "Credit Card Interest Settings"
+msgstr "Configurações do juros do cartão de crédito"
+
+#: tinymce/dialog.php:98
+#: wc-credit-table-interest-info.php:211
+#@ wcccit
+msgid "Parcels without interest"
+msgstr "Parcelas sem juros"
+
+#: wc-credit-table-interest-info.php:505
+#, php-format
+#@ wcccit
+msgid "Parcel maximum of %s"
+msgstr "Parcela máxima de %s"
+
+#: wc-credit-table-interest-info.php:532
+#@ wcccit
+msgid "Parcels Credit Card"
+msgstr "Parcelas do cartão de crédito"
+
+#: tinymce/dialog.php:79
+#@ wcccit
+msgid "Price"
+msgstr "Preço"
+
+#: wc-credit-table-interest-info.php:249
+#@ wcccit
+msgid "Amortization schedule: See details in <a href=\"http://en.wikipedia.org/wiki/Amortization_schedule\">Wikipedia</a><br />Simple interest: See details in <a href=\"http://en.wikipedia.org/wiki/Simple_interest#Simple_interest\">Wikipedia</a>"
+msgstr "Tabela Price: Calculo usado pelo PagSeguro e outros. Veja mais detalhes na <a href=\"http://pt.wikipedia.org/wiki/Tabela_Price\">Wikipedia</a><br />Juros simples: Calculo usado pelo B!Cash. Veja mais detalhes na <a href=\"http://pt.wikipedia.org/wiki/Juro#Juros_simples\">Wikipedia</a>"
+
