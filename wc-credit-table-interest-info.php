@@ -29,36 +29,40 @@ class WC_CreditCardInterestTable {
     public function __construct() {
 
         // Load textdomain.
-        add_action( 'plugins_loaded', array( $this, 'languages' ), 0 );
+        add_action( 'plugins_loaded', array( &$this, 'languages' ), 0 );
 
         // Default options.
-        register_activation_hook( __FILE__, array( $this, 'default_settings' ) );
-        register_activation_hook( __FILE__, array( $this, 'default_design' ) );
+        register_activation_hook( __FILE__, array( &$this, 'default_settings' ) );
+        register_activation_hook( __FILE__, array( &$this, 'default_design' ) );
 
         // Add menu.
-        add_action( 'admin_menu', array( $this, 'menu' ) );
+        add_action( 'admin_menu', array( &$this, 'menu' ) );
 
         // Init plugin options form.
-        add_action( 'admin_init', array( $this, 'plugin_settings' ) );
-        add_action( 'admin_init', array( $this, 'plugin_design' ) );
+        add_action( 'admin_init', array( &$this, 'plugin_settings' ) );
+        add_action( 'admin_init', array( &$this, 'plugin_design' ) );
 
         // Add view in WooCommerce products single.
         $views = get_option( 'wcccit_design' );
 
         if ( $views['display'] == 0 ) {
-            add_action( 'woocommerce_after_single_product_summary', array( $this, 'print_view' ), 50 );
+            add_action( 'woocommerce_after_single_product_summary', array( &$this, 'print_view' ), 50 );
 
         } else if ( $views['display'] == 1 ) {
-            add_action( 'woocommerce_after_single_product_summary', array( $this, 'print_view' ), 1 );
+            add_action( 'woocommerce_after_single_product_summary', array( &$this, 'print_view' ), 1 );
 
         } else if ( $views['display'] == 2 ) {
-            add_action( 'woocommerce_product_tabs', array( $this, 'tab_view' ), 60 );
-            add_action( 'woocommerce_product_tab_panels', array( $this, 'display_tab_view' ), 60 );
+            add_action( 'woocommerce_product_tabs', array( &$this, 'tab_view' ), 60 );
+            add_action( 'woocommerce_product_tab_panels', array( &$this, 'display_tab_view' ), 60 );
         }
 
         // Add Shortcode.
-        add_shortcode( 'wcccit', array( $this, 'shortcode' ) );
-        add_action( 'init', array( $this, 'shortcode_buttons_init' ) );
+        add_shortcode( 'wcccit', array( &$this, 'shortcode' ) );
+        add_action( 'init', array( &$this, 'shortcode_buttons_init' ) );
+
+        if ( isset( $_GET['page'] ) && $_GET['page'] == 'wcccit' ) {
+            add_action( 'admin_init', array( &$this, 'admin_scripts' ) );
+        }
     }
 
     /**
@@ -91,17 +95,33 @@ class WC_CreditCardInterestTable {
     public function default_design() {
 
         $default = array(
-            'display' => '0'
+            'display' => '0',
+            'title'   => __( 'Credit Cart Parcels', 'wcccit' ),
+            'float'   => 'none',
+            'width'   => '100%',
+            'border'  => '#DDDDDD',
+            'odd'     => '#F0F9E6',
+            'even'    => '#FFFFFF',
+            'without' => '#006600'
         );
 
-        add_option( 'wcccit_settings', $default );
+        add_option( 'wcccit_design', $default );
+    }
+
+    /**
+     * Admin Scripts.
+     */
+    public function admin_scripts() {
+        wp_enqueue_script( 'jquery' );
+        wp_enqueue_script( 'farbtastic' );
+        wp_enqueue_style( 'farbtastic' );
     }
 
     /**
      * Add Credit Card Interest Table menu.
      */
     public function menu() {
-        add_submenu_page( 'woocommerce', __( 'Credit Card Interest Table', 'wcccit' ), __( 'Credit Card Interest Table', 'wcccit' ), 'manage_options', 'wcccit', array( $this, 'settings_page' ) );
+        add_submenu_page( 'woocommerce', __( 'Credit Card Interest Table', 'wcccit' ), __( 'Credit Card Interest Table', 'wcccit' ), 'manage_options', 'wcccit', array( &$this, 'settings_page' ) );
     }
 
     /**
@@ -117,17 +137,13 @@ class WC_CreditCardInterestTable {
         }
 
         ?>
-
             <div class="wrap">
-                <div class="icon32" id="icon-options-general"><br /></div>
+                <?php screen_icon( 'options-general' ); ?>
                 <h2 class="nav-tab-wrapper">
                 <a href="admin.php?page=wcccit&amp;tab=settings" class="nav-tab <?php echo $current_tab == 'settings' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Settings', 'wcccit' ); ?></a><a href="admin.php?page=wcccit&amp;tab=design" class="nav-tab <?php echo $current_tab == 'design' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Design', 'wcccit' ); ?></a>
                 </h2>
-
                 <?php settings_errors(); ?>
-
                 <form method="post" action="options.php">
-
                     <?php
                         if ( $current_tab == 'design' ) {
                             settings_fields( 'wcccit_design' );
@@ -136,16 +152,12 @@ class WC_CreditCardInterestTable {
                         } else {
                             settings_fields( 'wcccit_settings' );
                             do_settings_sections( 'wcccit_settings' );
-
                         }
 
                         submit_button();
                     ?>
-
                 </form>
-
             </div>
-
         <?php
     }
 
@@ -156,7 +168,7 @@ class WC_CreditCardInterestTable {
         $option = 'wcccit_settings';
 
         // Create option in wp_options.
-        if ( false == get_option( $option ) ) {
+        if ( get_option( $option ) == false ) {
             add_option( $option );
         }
 
@@ -164,14 +176,14 @@ class WC_CreditCardInterestTable {
         add_settings_section(
             'settings_section',
             __( 'Credit Card Interest Settings', 'wcccit' ),
-            array( $this, 'section_options_callback' ),
+            '__return_false',
             $option
         );
 
         add_settings_field(
             'parcel_maximum',
             __( 'Number of parcels', 'wcccit' ),
-            array( $this , 'text_element_callback' ),
+            array( &$this , 'text_element_callback' ),
             $option,
             'settings_section',
             array(
@@ -184,7 +196,7 @@ class WC_CreditCardInterestTable {
         add_settings_field(
             'parcel_minimum',
             __( 'Parcel minimum', 'wcccit' ),
-            array( $this , 'text_element_callback' ),
+            array( &$this , 'text_element_callback' ),
             $option,
             'settings_section',
             array(
@@ -197,7 +209,7 @@ class WC_CreditCardInterestTable {
         add_settings_field(
             'iota',
             __( 'iota', 'wcccit' ),
-            array( $this , 'text_element_callback' ),
+            array( &$this , 'text_element_callback' ),
             $option,
             'settings_section',
             array(
@@ -210,7 +222,7 @@ class WC_CreditCardInterestTable {
         add_settings_field(
             'without_interest',
             __( 'Parcels without interest', 'wcccit' ),
-            array( $this , 'text_element_callback' ),
+            array( &$this , 'text_element_callback' ),
             $option,
             'settings_section',
             array(
@@ -223,7 +235,7 @@ class WC_CreditCardInterestTable {
         add_settings_field(
             'interest',
             __( 'Interest', 'wcccit' ),
-            array( $this , 'text_element_callback' ),
+            array( &$this , 'text_element_callback' ),
             $option,
             'settings_section',
             array(
@@ -236,7 +248,7 @@ class WC_CreditCardInterestTable {
         add_settings_field(
             'calculation_type',
             __( 'Calculation type', 'wcccit' ),
-            array( $this , 'select_element_callback' ),
+            array( &$this , 'select_element_callback' ),
             $option,
             'settings_section',
             array(
@@ -252,7 +264,7 @@ class WC_CreditCardInterestTable {
         );
 
         // Register settings.
-        register_setting( $option, $option, array( $this, 'validate_options' ) );
+        register_setting( $option, $option, array( &$this, 'validate_options' ) );
 
     }
 
@@ -263,22 +275,22 @@ class WC_CreditCardInterestTable {
         $option = 'wcccit_design';
 
         // Create option in wp_options.
-        if ( false == get_option( $option ) ) {
+        if ( get_option( $option ) == false ) {
             add_option( $option );
         }
 
-        // set Section.
+        // Set Section.
         add_settings_section(
             'design_section',
             __( 'Table Design', 'wcccit' ),
-            array( $this, 'section_options_callback' ),
+            '__return_false',
             $option
         );
 
         add_settings_field(
             'display',
             __( 'Display in', 'wcccit' ),
-            array( $this , 'select_element_callback' ),
+            array( &$this , 'select_element_callback' ),
             $option,
             'design_section',
             array(
@@ -294,15 +306,115 @@ class WC_CreditCardInterestTable {
             )
         );
 
+        add_settings_field(
+            'title',
+            __( 'Table Title', 'wcccit' ),
+            array( &$this , 'text_element_callback' ),
+            $option,
+            'design_section',
+            array(
+                'menu' => $option,
+                'id' => 'title',
+                'default' => __( 'Credit Cart Parcels', 'wcccit' ),
+                'class' => 'regular-text'
+            )
+        );
+
+        // Set Section.
+        add_settings_section(
+            'styles_section',
+            __( 'Table Styles', 'wcccit' ),
+            '__return_false',
+            $option
+        );
+
+        add_settings_field(
+            'float',
+            __( 'Float', 'wcccit' ),
+            array( &$this , 'select_element_callback' ),
+            $option,
+            'styles_section',
+            array(
+                'menu' => $option,
+                'id' => 'float',
+                'default' => 'none',
+                'items' => array(
+                    'none' => __( 'None', 'wcccit' ),
+                    'left' => __( 'Left', 'wcccit' ),
+                    'right' => __( 'Right', 'wcccit' ),
+                    'center' => __( 'Center', 'wcccit' ),
+                )
+            )
+        );
+
+        add_settings_field(
+            'width',
+            __( 'Width', 'wcccit' ),
+            array( &$this , 'text_element_callback' ),
+            $option,
+            'styles_section',
+            array(
+                'menu' => $option,
+                'id' => 'width',
+                'default' => '100%',
+                'description' => __( 'Value with %, px or em', 'wcccit' )
+            )
+        );
+
+        add_settings_field(
+            'border',
+            __( 'Border color', 'wcccit' ),
+            array( &$this , 'color_element_callback' ),
+            $option,
+            'styles_section',
+            array(
+                'menu' => $option,
+                'id' => 'border',
+                'default' => '#DDDDDD',
+            )
+        );
+
+        add_settings_field(
+            'odd',
+            __( 'Odd background' , 'wcccit' ),
+            array( &$this , 'color_element_callback' ),
+            $option,
+            'styles_section',
+            array(
+                'menu' => $option,
+                'id' => 'odd',
+                'default' => '#F0F9E6',
+            )
+        );
+
+        add_settings_field(
+            'even',
+            __( 'Even background', 'wcccit' ),
+            array( &$this , 'color_element_callback' ),
+            $option,
+            'styles_section',
+            array(
+                'menu' => $option,
+                'id' => 'even',
+                'default' => '#FFFFFF',
+            )
+        );
+
+        add_settings_field(
+            'without',
+            __( 'Without interest color', 'wcccit' ),
+            array( &$this , 'color_element_callback' ),
+            $option,
+            'styles_section',
+            array(
+                'menu' => $option,
+                'id' => 'without',
+                'default' => '#006600',
+            )
+        );
+
         // Register settings.
-        register_setting( $option, $option, array( $this, 'validate_options' ) );
-
-    }
-
-    /**
-     * Section null fallback.
-     */
-    public function section_options_callback() {
+        register_setting( $option, $option, array( &$this, 'validate_options' ) );
 
     }
 
@@ -312,6 +424,7 @@ class WC_CreditCardInterestTable {
     public function text_element_callback( $args ) {
         $menu = $args['menu'];
         $id = $args['id'];
+        $class = isset( $args['class'] ) ? $args['class'] : 'small-text';
 
         $options = get_option( $menu );
 
@@ -321,9 +434,9 @@ class WC_CreditCardInterestTable {
             $current = isset( $args['default'] ) ? $args['default'] : '';
         }
 
-        $html = '<input type="text" id="' . $id . '" name="' . $menu . '[' . $id . ']" value="' . esc_attr( $current ) . '" class="small-text" />';
+        $html = '<input type="text" id="' . $id . '" name="' . $menu . '[' . $id . ']" value="' . esc_attr( $current ) . '" class="' . $class . '" />';
 
-        if (isset($args['description'])) {
+        if ( isset( $args['description'] ) ) {
             $html .= '<p class="description">' . $args['description'] . '</p>';
         }
 
@@ -352,9 +465,46 @@ class WC_CreditCardInterestTable {
         }
         $html .= '</select>';
 
-        if (isset($args['description'])) {
+        if ( isset( $args['description'] ) ) {
             $html .= '<p class="description">' . $args['description'] . '</p>';
         }
+
+        echo $html;
+    }
+
+
+    /**
+     * Color element fallback.
+     */
+    function color_element_callback( $args ) {
+        $menu = $args['menu'];
+        $id = $args['id'];
+
+        $options = get_option( $menu );
+
+        if ( isset( $options[$id] ) ) {
+            $current = $options[$id];
+        } else {
+            $current = isset( $args['default'] ) ? $args['default'] : '#ffffff';
+        }
+
+        $html = '<input style="width: 70px" name="' . $menu . '[' . $id . ']" type="text" id="color-' . $id . '" value="' . esc_attr( $current ) . '" class="regular-text" />';
+
+        if ( isset( $args['description'] ) ) {
+            $html .= '<p class="description">' . $args['description'] . '</p>';
+        }
+
+        $html .= '<div id="farbtasticbox-' . $id . '"></div>';
+
+        $html .= '<script type="text/javascript">';
+            $html .= 'jQuery(document).ready(function($) {';
+                $html .= '$("#farbtasticbox-' . $id . '").hide();';
+                $html .= '$("#farbtasticbox-' . $id . '").farbtastic("#color-' . $id . '");';
+                $html .= '$("#color-' . $id . '").click(function(){';
+                    $html .= '$("#farbtasticbox-' . $id . '").slideToggle()';
+                $html .= '});';
+            $html .= '});';
+        $html .= '</script>';
 
         echo $html;
     }
@@ -461,55 +611,93 @@ class WC_CreditCardInterestTable {
         $interest,
         $calculation_type ) {
 
-        // Open the table.
-        $table = '<div style="clear: both;">';
-        $table .= '<div style="width: 50%; float:left;">';
+        // Get design options.
+        $design = get_option( 'wcccit_design' );
 
-        for ( $p = $parcel_minimum; $p <= $parcel_maximum; $p++ ) {
+        // Float ou margin.
+        $align = ( $design['float'] == 'center' ) ? ' margin-left: auto; margin-right: auto' : ' float: ' . $design['float'];
 
-            // Without interest.
-            if ( $p <= $without_interest ) {
-                $parcel_value = $price / $p;
-            }
+        $table = '';
 
-            // With interest.
-            if ( $p > $without_interest ) {
-                if ( $calculation_type == 0 ) {
-                    $parcel_value = ( $price * ( $interest / 100 ) ) / ( 1 - ( 1 / ( pow( 1 + ( $interest / 100 ), $p ) ) ) );
-                }
-                if ( $calculation_type == 1 ) {
-                    $parcel_value = ( $price * pow( 1 + ( $interest / 100 ), $p ) ) / $p;
-                }
-            }
+        if ( $price > $iota ) {
 
-            // Test iota.
-            if ( $parcel_value >= $iota ) {
+            // Open the table.
+            $table .= '<div id="wc-credit-cart-table" style="width: ' . $design['width'] . '; clear: both; margin-bottom: 1.5em;' . $align . ';">';
+            $table .= '<h3>' . $design['title'] . '</h3>';
+
+            // Border wrapper.
+            $table .= '<div style="border-width: 1px 0 0 1px; border-style: solid; border-color:' . $design['border'] . ';">';
+
+            $table .= '<div style="width: 50%; float: left;">';
+
+            $count = 0;
+            for ( $p = $parcel_minimum; $p <= $parcel_maximum; $p++ ) {
+
+                $background = ( $count %  2 ) ? $design['even'] : $design['odd'];
+
+                // Without interest.
                 if ( $p <= $without_interest ) {
-                    $table .= '<span style="color: #060;">' . sprintf( __( '%sx of %s without interest', 'wcccit' ), $p, $this->format_price( $parcel_value ) ) . '</span><br />';
-                } else {
-                    $table .= sprintf( __( '%sx of %s with interest', 'wcccit' ), $p, $this->format_price( $parcel_value ) ) . '<br />';
+                    $parcel_value = $price / $p;
                 }
+
+                // With interest.
+                if ( $p > $without_interest ) {
+
+                    if ( $calculation_type == 0 ) {
+                        $parcel_value = ( $price * ( $interest / 100 ) ) / ( 1 - ( 1 / ( pow( 1 + ( $interest / 100 ), $p ) ) ) );
+                    }
+
+                    if ( $calculation_type == 1 ) {
+                        $parcel_value = ( $price * pow( 1 + ( $interest / 100 ), $p ) ) / $p;
+                    }
+
+                }
+
+                // Test iota.
+                if ( $parcel_value >= $iota ) {
+
+                    if ( $p <= $without_interest ) {
+                        $table .= '<span style="display: block; padding: 2px 5px; color: ' . $design['without'] . '; background: ' . $background . '; border-width: 0 1px 1px 0; border-style: solid; border-color: ' . $design['border'] . ';">' . sprintf( __( '%s%sx%s of %s %swithout interest%s', 'wcccit' ), '<strong>', $p, '</strong>', $this->format_price( $parcel_value ), '<em>', '</em>' ) . '</span>';
+                    } else {
+                        $table .= '<span style="display: block; padding: 2px 5px; background: ' . $background . '; border-width: 0 1px 1px 0; border-style: solid; border-color: ' . $design['border'] . ';">' . sprintf( __( '%s%sx%s of %s %swith interest%s', 'wcccit' ), '<strong>', $p, '</strong>' , $this->format_price( $parcel_value ), '<em>', '</em>' ) . '</span>';
+                    }
+
+                }
+
+                if ( $p == intval( $parcel_maximum / 2 ) ) {
+                    $table .= '</div>';
+
+                    $table .= '<div style="width: 50%; float: right;">';
+                }
+
+                $count++;
             }
 
-            if ( $p == intval( $parcel_maximum / 2 ) + 1 ) {
-                $table .= '</div><div style="width: 50%; float: right;">';
+            $table .= '</div>';
+
+            // Close the border wrapper.
+            $table .= '<div style="clear: both;"></div>';
+            $table .= '</div>';
+
+            // Details.
+            $table .= '<div style="text-align: right; padding: 3px 5px; font-size: smaller;">';
+
+            // Show interest info.
+            if ( $without_interest < $parcel_maximum ) {
+                $table .= '<span>' . sprintf( __( 'Interest of %s%s per month', 'wcccit' ), $this->number_format( $interest ), '%' ) . '</span>';
             }
+
+            // Show maximum parcel info.
+            if ( $iota > 0 ) {
+                $table .= '<span>' . sprintf( __( ' (parcel minimum of %s)', 'wcccit' ), $this->format_price( $iota ) ) . '</span>';
+            }
+
+            // Close the details.
+            $table .= '</div>';
+
+            // Close the table.
+            $table .= '</div>';
         }
-
-        // Show interest info.
-        if ( $without_interest < $parcel_maximum ) {
-            $table .= '<span style="font-size: smaller;">' . sprintf( __( 'Interest of %s%s per month', 'wcccit' ), $this->number_format( $interest ), '%' ) . '</span>';
-        }
-
-        // Show maximum parcel info.
-        if ( $iota > 0 ) {
-            $table .= '<br /><span style="font-size: smaller;">' . sprintf( __( 'Parcel maximum of %s', 'wcccit' ), $this->format_price( $iota ) ) . '</span>';
-        }
-
-        $table .= '</div><br style="clear: both;" />';
-
-        // Close the table.
-        $table .= '</div>';
 
         return $table;
     }
@@ -523,7 +711,7 @@ class WC_CreditCardInterestTable {
         // Get settings.
         $default = get_option( 'wcccit_settings' );
 
-        echo $this->view( $product->price, $default['parcel_maximum'], $default['parcel_minimum'], $default['iota'], $default['without_interest'], $default['interest'], $default['calculation_type'] );
+        echo $this->view( $product->get_price(), $default['parcel_maximum'], $default['parcel_minimum'], $default['iota'], $default['without_interest'], $default['interest'], $default['calculation_type'] );
     }
 
     /**
@@ -600,8 +788,8 @@ class WC_CreditCardInterestTable {
         }
 
         if ( get_user_option( 'rich_editing') == 'true' ) {
-            add_filter( 'mce_external_plugins', array( $this, 'shortcode_add_buttons' ) );
-            add_filter( 'mce_buttons', array( $this, 'shortcode_register_buttons' ) );
+            add_filter( 'mce_external_plugins', array( &$this, 'shortcode_add_buttons' ) );
+            add_filter( 'mce_buttons', array( &$this, 'shortcode_register_buttons' ) );
         }
     }
 
