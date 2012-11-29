@@ -12,13 +12,6 @@
  */
 
 /**
- * TODO:
- * Adicionar opções de design.
- * Formatar corretamente a tabela com as opções de design.
- * Escrever readme.txt
- */
-
-/**
  * WC_CreditCardInterestTable class.
  */
 class WC_CreditCardInterestTable {
@@ -54,6 +47,8 @@ class WC_CreditCardInterestTable {
         } else if ( $views['display'] == 2 ) {
             add_action( 'woocommerce_product_tabs', array( &$this, 'tab_view' ), 60 );
             add_action( 'woocommerce_product_tab_panels', array( &$this, 'display_tab_view' ), 60 );
+        } else if ( $views['display'] == 3 ) {
+            add_action( 'woocommerce_single_product_summary', array( &$this, 'print_view' ), 35 );
         }
 
         // Add Shortcode.
@@ -301,7 +296,8 @@ class WC_CreditCardInterestTable {
                     '0' => __( 'Product bottom', 'wcccit' ),
                     '1' => __( 'Before product tab', 'wcccit' ),
                     '2' => __( 'Product tab', 'wcccit' ),
-                    '3' => __( 'No display', 'wcccit' ),
+                    '3' => __( 'After add to cart button', 'wcccit' ),
+                    '4' => __( 'No display', 'wcccit' ),
                 )
             )
         );
