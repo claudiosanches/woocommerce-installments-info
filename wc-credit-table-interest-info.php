@@ -56,8 +56,11 @@ class WC_CreditCardInterestTable {
         add_action( 'init', array( &$this, 'shortcode_buttons_init' ) );
 
         if ( isset( $_GET['page'] ) && $_GET['page'] == 'wcccit' ) {
-            add_action( 'admin_init', array( &$this, 'admin_scripts' ) );
+            add_action( 'admin_enqueue_scripts', array( &$this, 'admin_scripts' ) );
         }
+
+
+        add_action( 'wp_enqueue_scripts', array( &$this, 'front_scripts' ) );
     }
 
     /**
@@ -110,6 +113,18 @@ class WC_CreditCardInterestTable {
         wp_enqueue_script( 'jquery' );
         wp_enqueue_script( 'farbtastic' );
         wp_enqueue_style( 'farbtastic' );
+        wp_register_style( 'wcccit', plugins_url( 'css/styles.css', __FILE__ ), array(), null, 'all' );
+        wp_enqueue_style( 'wcccit' );
+    }
+
+    /**
+     * Front-End Scripts.
+     */
+    public function front_scripts() {
+        if ( is_product() ) {
+            wp_register_style( 'wcccit', plugins_url( 'css/styles.css', __FILE__ ), array(), null, 'all' );
+            wp_enqueue_style( 'wcccit' );
+        }
     }
 
     /**
@@ -143,6 +158,12 @@ class WC_CreditCardInterestTable {
                         if ( $current_tab == 'design' ) {
                             settings_fields( 'wcccit_design' );
                             do_settings_sections( 'wcccit_design' );
+                            settings_fields( 'wcccit_icons' );
+                            do_settings_sections( 'wcccit_icons' );
+
+                            echo '<pre>';
+                            print_r( get_option( 'wcccit_icons' ) );
+                            echo '</pre>';
 
                         } else {
                             settings_fields( 'wcccit_settings' );
@@ -268,10 +289,14 @@ class WC_CreditCardInterestTable {
      */
     public function plugin_design() {
         $option = 'wcccit_design';
+        $icons = 'wcccit_icons';
 
         // Create option in wp_options.
         if ( get_option( $option ) == false ) {
             add_option( $option );
+        }
+        if ( get_option( $icons ) == false ) {
+            add_option( $icons );
         }
 
         // Set Section.
@@ -409,7 +434,36 @@ class WC_CreditCardInterestTable {
             )
         );
 
+        // Set Section.
+        add_settings_section(
+            'icons_section',
+            __( '', 'wcccit' ),
+            '__return_false',
+            $icons
+        );
+
+        add_settings_field(
+            'cards',
+            __( 'Cards', 'wcccit' ),
+            array( &$this , 'checkbox_cards_element_callback' ),
+            $icons,
+            'icons_section',
+            array(
+                'menu' => $icons,
+                'id' => 'cards',
+                'items' => array(
+                    'visa' => 'visa',
+                    'master' => 'master',
+                    'hypercard' => 'hypercard',
+                    'american' => 'american',
+                    'diners' => 'diners',
+                    'aura' => 'aura'
+                )
+            )
+        );
+
         // Register settings.
+        register_setting( $icons, $icons, array( &$this, 'validate_options' ) );
         register_setting( $option, $option, array( &$this, 'validate_options' ) );
 
     }
@@ -430,10 +484,11 @@ class WC_CreditCardInterestTable {
             $current = isset( $args['default'] ) ? $args['default'] : '';
         }
 
-        $html = '<input type="text" id="' . $id . '" name="' . $menu . '[' . $id . ']" value="' . esc_attr( $current ) . '" class="' . $class . '" />';
+        $html = sprintf( '<input type="text" id="%1$s" name="%2$s[%1$s]" value="%3$s" class="%4$s" />', $id, $menu, $current, $class );
 
+        // Displays option description.
         if ( isset( $args['description'] ) ) {
-            $html .= '<p class="description">' . $args['description'] . '</p>';
+            $html .= sprintf( '<p class="description">%s</p>', $args['description'] );
         }
 
         echo $html;
@@ -455,19 +510,59 @@ class WC_CreditCardInterestTable {
             $current = isset( $args['default'] ) ? $args['default'] : '';
         }
 
-        $html = '<select id="' . $id . '" name="' . $menu . '[' . $id . ']">';
-        foreach ( $items as $key => $value ) {
-            $html .= '<option value="' . $key . '"' . selected( $current, $key, false ) . '>' . $value . '</option>';
+        $html = sprintf( '<select id="%1$s" name="%2$s[%1$s]">', $id, $menu );
+        foreach( $items as $key => $label ) {
+            $key = sanitize_title( $key );
+
+            $html .= sprintf( '<option value="%s"%s>%s</option>', $key, selected( $current, $key, false ), $label );
         }
         $html .= '</select>';
 
+        // Displays option description.
         if ( isset( $args['description'] ) ) {
-            $html .= '<p class="description">' . $args['description'] . '</p>';
+            $html .= sprintf( '<p class="description">%s</p>', $args['description'] );
         }
 
         echo $html;
     }
 
+    /**
+     * Select element fallback.
+     */
+    public function checkbox_cards_element_callback( $args ) {
+        $menu = $args['menu'];
+        $id = $args['id'];
+        $items = $args['items'];
+
+        $options = get_option( $menu );
+
+        $count = 0;
+        $html = '';
+        foreach( $items as $key => $label ) {
+            $item_name = $menu . '[' . $count . ']';
+
+            // Sets current option.
+            if ( isset( $options[$count] ) ) {
+                $current = $options[$count];
+            } else {
+                $current = isset( $args['default'] ) ? $args['default'] : '';
+            }
+
+            $html .= '<div class="card-item">';
+            $html .= sprintf( '<input type="checkbox" id="%2$s-%4$s" name="%1$s" value="%4$s"%3$s />', $item_name, $menu, checked( $current, $key, false ), $key );
+            $html .= sprintf( '<label for="%s-%s"> <div class="card-icons card-%s"></div></label>', $menu, $key, $label );
+            $html .= '<br style="clear: both;" /></div>';
+
+            $count++;
+        }
+
+        // Displays option description.
+        if ( isset( $args['description'] ) ) {
+            $html .= sprintf( '<p class="description">%s</p>', $args['description'] );
+        }
+
+        echo $html;
+    }
 
     /**
      * Color element fallback.
@@ -484,20 +579,21 @@ class WC_CreditCardInterestTable {
             $current = isset( $args['default'] ) ? $args['default'] : '#ffffff';
         }
 
-        $html = '<input style="width: 70px" name="' . $menu . '[' . $id . ']" type="text" id="color-' . $id . '" value="' . esc_attr( $current ) . '" class="regular-text" />';
+        $html = sprintf( '<input type="text" id="color-%1$s" name="%2$s[%1$s]" value="%3$s" class="regular-text" style="width: 75px" />', $id, $menu, $current );
 
+        // Displays option description.
         if ( isset( $args['description'] ) ) {
-            $html .= '<p class="description">' . $args['description'] . '</p>';
+            $html .= sprintf( '<p class="description">%s</p>', $args['description'] );
         }
 
-        $html .= '<div id="farbtasticbox-' . $id . '"></div>';
+        $html .= sprintf( '<div id="farbtasticbox-%s"></div>', $id );
 
         $html .= '<script type="text/javascript">';
             $html .= 'jQuery(document).ready(function($) {';
-                $html .= '$("#farbtasticbox-' . $id . '").hide();';
-                $html .= '$("#farbtasticbox-' . $id . '").farbtastic("#color-' . $id . '");';
-                $html .= '$("#color-' . $id . '").click(function(){';
-                    $html .= '$("#farbtasticbox-' . $id . '").slideToggle()';
+                $html .= sprintf( '$("#farbtasticbox-%s").hide();', $id );
+                $html .= sprintf( '$("#farbtasticbox-%1$s").farbtastic("#color-%1$s");', $id );
+                $html .= sprintf( '$("#color-%s").click(function(){', $id );
+                    $html .= sprintf( '$("#farbtasticbox-%s").slideToggle()', $id );
                 $html .= '});';
             $html .= '});';
         $html .= '</script>';
@@ -610,6 +706,9 @@ class WC_CreditCardInterestTable {
         // Get design options.
         $design = get_option( 'wcccit_design' );
 
+        // Get icons
+        $icons = get_option( 'wcccit_icons', '' );
+
         // Float ou margin.
         $align = ( $design['float'] == 'center' ) ? ' margin-left: auto; margin-right: auto' : ' float: ' . $design['float'];
 
@@ -618,13 +717,13 @@ class WC_CreditCardInterestTable {
         if ( $price > $iota ) {
 
             // Open the table.
-            $table .= '<div id="wc-credit-cart-table" style="width: ' . $design['width'] . '; clear: both; margin-bottom: 1.5em;' . $align . ';">';
+            $table .= '<div id="wc-credit-cart-table" class="clear" style="width: ' . $design['width'] . ';' . $align . ';">';
             $table .= '<h3>' . $design['title'] . '</h3>';
 
             // Border wrapper.
-            $table .= '<div style="border-width: 1px 0 0 1px; border-style: solid; border-color:' . $design['border'] . ';">';
+            $table .= '<div id="wc-credit-cart-table-wrap" style="border-color:' . $design['border'] . ';">';
 
-            $table .= '<div style="width: 50%; float: left;">';
+            $table .= '<div class="part left">';
 
             $count = 0;
             for ( $p = $parcel_minimum; $p <= $parcel_maximum; $p++ ) {
@@ -653,9 +752,9 @@ class WC_CreditCardInterestTable {
                 if ( $parcel_value >= $iota ) {
 
                     if ( $p <= $without_interest ) {
-                        $table .= '<span style="display: block; padding: 2px 5px; color: ' . $design['without'] . '; background: ' . $background . '; border-width: 0 1px 1px 0; border-style: solid; border-color: ' . $design['border'] . ';">' . sprintf( __( '%s%sx%s of %s %swithout interest%s', 'wcccit' ), '<strong>', $p, '</strong>', $this->format_price( $parcel_value ), '<em>', '</em>' ) . '</span>';
+                        $table .= '<span class="card-info" style="color: ' . $design['without'] . '; background: ' . $background . '; border-color: ' . $design['border'] . ';">' . sprintf( __( '%s%sx%s of %s %swithout interest%s', 'wcccit' ), '<strong>', $p, '</strong>', $this->format_price( $parcel_value ), '<em>', '</em>' ) . '</span>';
                     } else {
-                        $table .= '<span style="display: block; padding: 2px 5px; background: ' . $background . '; border-width: 0 1px 1px 0; border-style: solid; border-color: ' . $design['border'] . ';">' . sprintf( __( '%s%sx%s of %s %swith interest%s', 'wcccit' ), '<strong>', $p, '</strong>' , $this->format_price( $parcel_value ), '<em>', '</em>' ) . '</span>';
+                        $table .= '<span class="card-info" style="background: ' . $background . '; border-color: ' . $design['border'] . ';">' . sprintf( __( '%s%sx%s of %s %swith interest%s', 'wcccit' ), '<strong>', $p, '</strong>' , $this->format_price( $parcel_value ), '<em>', '</em>' ) . '</span>';
                     }
 
                 }
@@ -663,7 +762,7 @@ class WC_CreditCardInterestTable {
                 if ( $p == intval( $parcel_maximum / 2 ) ) {
                     $table .= '</div>';
 
-                    $table .= '<div style="width: 50%; float: right;">';
+                    $table .= '<div class="part right">';
                 }
 
                 $count++;
@@ -672,11 +771,11 @@ class WC_CreditCardInterestTable {
             $table .= '</div>';
 
             // Close the border wrapper.
-            $table .= '<div style="clear: both;"></div>';
+            $table .= '<div class="clear"></div>';
             $table .= '</div>';
 
             // Details.
-            $table .= '<div style="text-align: right; padding: 3px 5px; font-size: smaller;">';
+            $table .= '<div id="wc-credit-cart-table-details">';
 
             // Show interest info.
             if ( $without_interest < $parcel_maximum ) {
@@ -690,6 +789,21 @@ class WC_CreditCardInterestTable {
 
             // Close the details.
             $table .= '</div>';
+
+            // Display credit card icons.
+            if ( $icons != '' ) {
+
+                $table .= '<div id="wc-credit-cart-table-icons">';
+                $table .= '<strong>' . __( 'Pay with: ', 'wcccit' ) . '</strong>';
+
+                foreach ( $icons as $key => $value ) {
+                    $table .= sprintf( '<span class="card-icons card-%s"></span>', $value );
+                }
+
+                $table .= '<div class="clear"></div>';
+                $table .= '</div>';
+            }
+
 
             // Close the table.
             $table .= '</div>';
@@ -812,3 +926,4 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 } else {
     add_action( 'admin_notices', 'wcccit_fallback_notice' );
 }
+
