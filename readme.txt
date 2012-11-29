@@ -13,8 +13,6 @@ WooCommerce Credit Card Interest Table
 
 == Description ==
 
-### Add Bcash gateway to WooCommerce
-
 *note: descrition here*
 
 == Installation ==
