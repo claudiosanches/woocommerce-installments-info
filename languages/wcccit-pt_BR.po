@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: WooCommerce Credit Card Interest Table v1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2012-12-01 01:58:09+0000\n"
+"PO-Revision-Date: 2012-12-01 02:07:06+0000\n"
 "Last-Translator: Claudio Sanches <contato@claudiosmweb.com>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -134,13 +134,13 @@ msgstr "Como aba do produto"
 msgid "No display"
 msgstr "Em nenhum local (Usar apenas como Shortcode)"
 
-#: wc-credit-cart-interest-table.php:761
+#: wc-credit-cart-interest-table.php:764
 #, php-format
 #@ wcccit
 msgid "Interest of %s%s per month"
 msgstr "Juros de %s%s por mês"
 
-#: wc-credit-cart-interest-table.php:892
+#: wc-credit-cart-interest-table.php:895
 #, php-format
 #@ wcccit
 msgid "WooCommerce Credit Card Interest Table depends on <a href=\"%s\">WooCommerce</a> to work!"
@@ -156,11 +156,6 @@ msgstr "Configurações do juros do cartão de crédito"
 #@ wcccit
 msgid "Parcels without interest"
 msgstr "Parcelas sem juros"
-
-#: wc-credit-cart-interest-table.php:810
-#@ wcccit
-msgid "Parcels Credit Card"
-msgstr "Parcelas do cartão de crédito"
 
 #: tinymce/dialog.php:79
 #@ wcccit
@@ -252,31 +247,32 @@ msgstr "Sem juros cor"
 msgid "Cards"
 msgstr "Cartões"
 
-#: wc-credit-cart-interest-table.php:734
+#: wc-credit-cart-interest-table.php:737
 #, php-format
 #@ wcccit
 msgid "%s%sx%s of %s %swithout interest%s"
 msgstr "%s%sx%s de %s %ssem juros%s"
 
-#: wc-credit-cart-interest-table.php:736
+#: wc-credit-cart-interest-table.php:739
 #, php-format
 #@ wcccit
 msgid "%s%sx%s of %s %swith interest%s"
 msgstr "%s%sx%s de %s %scom juros%s"
 
-#: wc-credit-cart-interest-table.php:766
+#: wc-credit-cart-interest-table.php:769
 #, php-format
 #@ wcccit
 msgid " (parcel minimum of %s)"
 msgstr " (parcela mínima de %s)"
 
-#: wc-credit-cart-interest-table.php:776
+#: wc-credit-cart-interest-table.php:779
 #@ wcccit
 msgid "Pay with: "
 msgstr "Pagar com: "
 
 #: wc-credit-cart-interest-table.php:90
 #: wc-credit-cart-interest-table.php:318
+#: wc-credit-cart-interest-table.php:813
 #@ wcccit
 msgid "Credit Card Parcels"
 msgstr "Parcelas do Cartão de Crédito"

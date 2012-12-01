@@ -697,7 +697,10 @@ class WC_CreditCardInterestTable {
 
             // Open the table.
             $table .= '<div id="wc-credit-cart-table" class="clear" style="width: ' . $design['width'] . ';' . $align . ';">';
-            $table .= '<h3>' . $design['title'] . '</h3>';
+
+            if ( $design['display'] != 2 ) {
+                $table .= '<h3>' . $design['title'] . '</h3>';
+            }
 
             // Border wrapper.
             $table .= '<div id="wc-credit-cart-table-wrap" style="border-color:' . $design['border'] . ';">';
@@ -807,7 +810,7 @@ class WC_CreditCardInterestTable {
      * Create a new tab.
      */
     public function tab_view() {
-        echo '<li class="wcccit_tab"><a href="#tab-wcccit">' . apply_filters( 'wcccit_tab_title' , __( 'Parcels Credit Card', 'wcccit' ) ) . '</a></li>';
+        echo '<li class="wcccit_tab"><a href="#tab-wcccit">' . apply_filters( 'wcccit_tab_title' , __( 'Credit Card Parcels', 'wcccit' ) ) . '</a></li>';
     }
 
     /**
