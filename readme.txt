@@ -7,13 +7,15 @@ Stable tag: 1.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-WooCommerce Credit Card Interest Table
-
-*note: descrition here*
+Display a table with the credit card interest in your WooCommerce
 
 == Description ==
 
-*note: descrition here*
+Display a table with the credit card interest in your WooCommerce.
+
+### Credits ###
+
+Icons by [PremiumPixels](http://www.premiumpixels.com/) and Ricardo Stancato.
 
 == Installation ==
 
@@ -48,3 +50,12 @@ You should have received a copy of the GNU General Public License along with Aut
 = 1.0 =
 
 * Enjoy it.
+
+== Screenshots ==
+
+1. screenshot-1.png
+2. screenshot-2.png
+3. screenshot-3.png
+4. screenshot-4.png
+5. screenshot-5.png
+6. screenshot-6.png
