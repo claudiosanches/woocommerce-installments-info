@@ -87,7 +87,7 @@ class WC_CreditCardInterestTable {
 
         $design = array(
             'display' => '0',
-            'title'   => __( 'Credit Cart Parcels', 'wcccit' ),
+            'title'   => __( 'Credit Card Parcels', 'wcccit' ),
             'float'   => 'none',
             'width'   => '100%',
             'border'  => '#DDDDDD',
@@ -315,7 +315,7 @@ class WC_CreditCardInterestTable {
             array(
                 'menu' => $design,
                 'id' => 'title',
-                'default' => __( 'Credit Cart Parcels', 'wcccit' ),
+                'default' => __( 'Credit Card Parcels', 'wcccit' ),
                 'class' => 'regular-text'
             )
         );
