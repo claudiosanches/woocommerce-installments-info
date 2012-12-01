@@ -15,7 +15,8 @@ Display a table with the credit card interest in your WooCommerce.
 
 ### Credits ###
 
-* Icons by [PremiumPixels](http://www.premiumpixels.com/) and Ricardo Stancato.
+* Icons by [PremiumPixels](http://www.premiumpixels.com/).
+* Customizing icons and original idea by [Ricardo Stancato](http://www.ricardo.stancato.com.br)
 * Calculations inspired in PHP code by [denisgomes](http://www.denisgomes.com.br).
 
 == Installation ==
