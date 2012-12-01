@@ -26,14 +26,12 @@ class WC_CreditCardInterestTable {
 
         // Default options.
         register_activation_hook( __FILE__, array( &$this, 'default_settings' ) );
-        register_activation_hook( __FILE__, array( &$this, 'default_design' ) );
 
         // Add menu.
         add_action( 'admin_menu', array( &$this, 'menu' ) );
 
         // Init plugin options form.
         add_action( 'admin_init', array( &$this, 'plugin_settings' ) );
-        add_action( 'admin_init', array( &$this, 'plugin_design' ) );
 
         // Add view in WooCommerce products single.
         $views = get_option( 'wcccit_design' );
@@ -56,10 +54,11 @@ class WC_CreditCardInterestTable {
         add_action( 'init', array( &$this, 'shortcode_buttons_init' ) );
 
         if ( isset( $_GET['page'] ) && $_GET['page'] == 'wcccit' ) {
+            // Back-end scripts.
             add_action( 'admin_enqueue_scripts', array( &$this, 'admin_scripts' ) );
         }
 
-
+        // Front-end scripts.
         add_action( 'wp_enqueue_scripts', array( &$this, 'front_scripts' ) );
     }
 
@@ -75,7 +74,7 @@ class WC_CreditCardInterestTable {
      */
     public function default_settings() {
 
-        $default = array(
+        $settings = array(
             'parcel_maximum'   => '12',
             'parcel_minimum'   => '1',
             'iota'             => '5',
@@ -84,15 +83,9 @@ class WC_CreditCardInterestTable {
             'calculation_type' => '0'
         );
 
-        add_option( 'wcccit_settings', $default );
-    }
+        add_option( 'wcccit_settings', $settings );
 
-    /**
-     * Set default design options.
-     */
-    public function default_design() {
-
-        $default = array(
+        $design = array(
             'display' => '0',
             'title'   => __( 'Credit Cart Parcels', 'wcccit' ),
             'float'   => 'none',
@@ -103,7 +96,9 @@ class WC_CreditCardInterestTable {
             'without' => '#006600'
         );
 
-        add_option( 'wcccit_design', $default );
+        add_option( 'wcccit_design', $design );
+
+
     }
 
     /**
@@ -150,7 +145,7 @@ class WC_CreditCardInterestTable {
             <div class="wrap">
                 <?php screen_icon( 'options-general' ); ?>
                 <h2 class="nav-tab-wrapper">
-                <a href="admin.php?page=wcccit&amp;tab=settings" class="nav-tab <?php echo $current_tab == 'settings' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Settings', 'wcccit' ); ?></a><a href="admin.php?page=wcccit&amp;tab=design" class="nav-tab <?php echo $current_tab == 'design' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Design', 'wcccit' ); ?></a>
+                <a href="admin.php?page=wcccit&amp;tab=settings" class="nav-tab <?php echo $current_tab == 'settings' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Settings', 'wcccit' ); ?></a><a href="admin.php?page=wcccit&amp;tab=design" class="nav-tab <?php echo $current_tab == 'design' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Design', 'wcccit' ); ?></a><a href="admin.php?page=wcccit&amp;tab=icons" class="nav-tab <?php echo $current_tab == 'icons' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Icons', 'wcccit' ); ?></a>
                 </h2>
                 <?php settings_errors(); ?>
                 <form method="post" action="options.php">
@@ -158,13 +153,9 @@ class WC_CreditCardInterestTable {
                         if ( $current_tab == 'design' ) {
                             settings_fields( 'wcccit_design' );
                             do_settings_sections( 'wcccit_design' );
+                        } elseif ( $current_tab == 'icons' ) {
                             settings_fields( 'wcccit_icons' );
                             do_settings_sections( 'wcccit_icons' );
-
-                            echo '<pre>';
-                            print_r( get_option( 'wcccit_icons' ) );
-                            echo '</pre>';
-
                         } else {
                             settings_fields( 'wcccit_settings' );
                             do_settings_sections( 'wcccit_settings' );
@@ -182,10 +173,18 @@ class WC_CreditCardInterestTable {
      */
     public function plugin_settings() {
         $option = 'wcccit_settings';
+        $design = 'wcccit_design';
+        $icons = 'wcccit_icons';
 
         // Create option in wp_options.
         if ( get_option( $option ) == false ) {
             add_option( $option );
+        }
+        if ( get_option( $design ) == false ) {
+            add_option( $design );
+        }
+        if ( get_option( $icons ) == false ) {
+            add_option( $icons );
         }
 
         // set Section.
@@ -279,42 +278,22 @@ class WC_CreditCardInterestTable {
             )
         );
 
-        // Register settings.
-        register_setting( $option, $option, array( &$this, 'validate_options' ) );
-
-    }
-
-    /**
-     * Plugin design form fields.
-     */
-    public function plugin_design() {
-        $option = 'wcccit_design';
-        $icons = 'wcccit_icons';
-
-        // Create option in wp_options.
-        if ( get_option( $option ) == false ) {
-            add_option( $option );
-        }
-        if ( get_option( $icons ) == false ) {
-            add_option( $icons );
-        }
-
         // Set Section.
         add_settings_section(
             'design_section',
             __( 'Table Design', 'wcccit' ),
             '__return_false',
-            $option
+            $design
         );
 
         add_settings_field(
             'display',
             __( 'Display in', 'wcccit' ),
             array( &$this , 'select_element_callback' ),
-            $option,
+            $design,
             'design_section',
             array(
-                'menu' => $option,
+                'menu' => $design,
                 'id' => 'display',
                 'default' => '0',
                 'items' => array(
@@ -331,10 +310,10 @@ class WC_CreditCardInterestTable {
             'title',
             __( 'Table Title', 'wcccit' ),
             array( &$this , 'text_element_callback' ),
-            $option,
+            $design,
             'design_section',
             array(
-                'menu' => $option,
+                'menu' => $design,
                 'id' => 'title',
                 'default' => __( 'Credit Cart Parcels', 'wcccit' ),
                 'class' => 'regular-text'
@@ -346,17 +325,17 @@ class WC_CreditCardInterestTable {
             'styles_section',
             __( 'Table Styles', 'wcccit' ),
             '__return_false',
-            $option
+            $design
         );
 
         add_settings_field(
             'float',
             __( 'Float', 'wcccit' ),
             array( &$this , 'select_element_callback' ),
-            $option,
+            $design,
             'styles_section',
             array(
-                'menu' => $option,
+                'menu' => $design,
                 'id' => 'float',
                 'default' => 'none',
                 'items' => array(
@@ -372,10 +351,10 @@ class WC_CreditCardInterestTable {
             'width',
             __( 'Width', 'wcccit' ),
             array( &$this , 'text_element_callback' ),
-            $option,
+            $design,
             'styles_section',
             array(
-                'menu' => $option,
+                'menu' => $design,
                 'id' => 'width',
                 'default' => '100%',
                 'description' => __( 'Value with %, px or em', 'wcccit' )
@@ -386,10 +365,10 @@ class WC_CreditCardInterestTable {
             'border',
             __( 'Border color', 'wcccit' ),
             array( &$this , 'color_element_callback' ),
-            $option,
+            $design,
             'styles_section',
             array(
-                'menu' => $option,
+                'menu' => $design,
                 'id' => 'border',
                 'default' => '#DDDDDD',
             )
@@ -399,10 +378,10 @@ class WC_CreditCardInterestTable {
             'odd',
             __( 'Odd background' , 'wcccit' ),
             array( &$this , 'color_element_callback' ),
-            $option,
+            $design,
             'styles_section',
             array(
-                'menu' => $option,
+                'menu' => $design,
                 'id' => 'odd',
                 'default' => '#F0F9E6',
             )
@@ -412,10 +391,10 @@ class WC_CreditCardInterestTable {
             'even',
             __( 'Even background', 'wcccit' ),
             array( &$this , 'color_element_callback' ),
-            $option,
+            $design,
             'styles_section',
             array(
-                'menu' => $option,
+                'menu' => $design,
                 'id' => 'even',
                 'default' => '#FFFFFF',
             )
@@ -425,10 +404,10 @@ class WC_CreditCardInterestTable {
             'without',
             __( 'Without interest color', 'wcccit' ),
             array( &$this , 'color_element_callback' ),
-            $option,
+            $design,
             'styles_section',
             array(
-                'menu' => $option,
+                'menu' => $design,
                 'id' => 'without',
                 'default' => '#006600',
             )
@@ -463,9 +442,9 @@ class WC_CreditCardInterestTable {
         );
 
         // Register settings.
-        register_setting( $icons, $icons, array( &$this, 'validate_options' ) );
         register_setting( $option, $option, array( &$this, 'validate_options' ) );
-
+        register_setting( $icons, $icons, array( &$this, 'validate_options' ) );
+        register_setting( $design, $design, array( &$this, 'validate_options' ) );
     }
 
     /**

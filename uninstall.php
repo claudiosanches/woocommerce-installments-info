@@ -6,3 +6,4 @@ if ( !defined( 'WP_UNINSTALL_PLUGIN' ) )
 
 delete_option( 'wcccit_settings' );
 delete_option( 'wcccit_design' );
+delete_option( 'wcccit_icons' );
