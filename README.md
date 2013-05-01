@@ -27,23 +27,23 @@ Display a table with the credit card interest in your WooCommerce.
 
 ## Screenshots ##
 
-###1. screenshot-1.png###
-![screenshot-1.png](http://s.wordpress.org/extend/plugins/woocommerce-credit-card-interest-table/screenshot-1.png)
+### 1. screenshot-1.png ###
+![1. screenshot-1.png](http://s.wordpress.org/extend/plugins/woocommerce-credit-card-interest-table/screenshot-1.png)
 
-###2. screenshot-2.png###
-![screenshot-2.png](http://s.wordpress.org/extend/plugins/woocommerce-credit-card-interest-table/screenshot-2.png)
+### 2. screenshot-2.png ###
+![2. screenshot-2.png](http://s.wordpress.org/extend/plugins/woocommerce-credit-card-interest-table/screenshot-2.png)
 
-###3. screenshot-3.png###
-![screenshot-3.png](http://s.wordpress.org/extend/plugins/woocommerce-credit-card-interest-table/screenshot-3.png)
+### 3. screenshot-3.png ###
+![3. screenshot-3.png](http://s.wordpress.org/extend/plugins/woocommerce-credit-card-interest-table/screenshot-3.png)
 
-###4. screenshot-4.png###
-![screenshot-4.png](http://s.wordpress.org/extend/plugins/woocommerce-credit-card-interest-table/screenshot-4.png)
+### 4. screenshot-4.png ###
+![4. screenshot-4.png](http://s.wordpress.org/extend/plugins/woocommerce-credit-card-interest-table/screenshot-4.png)
 
-###5. screenshot-5.png###
-![screenshot-5.png](http://s.wordpress.org/extend/plugins/woocommerce-credit-card-interest-table/screenshot-5.png)
+### 5. screenshot-5.png ###
+![5. screenshot-5.png](http://s.wordpress.org/extend/plugins/woocommerce-credit-card-interest-table/screenshot-5.png)
 
-###6. screenshot-6.png###
-![screenshot-6.png](http://s.wordpress.org/extend/plugins/woocommerce-credit-card-interest-table/screenshot-6.png)
+### 6. screenshot-6.png ###
+![6. screenshot-6.png](http://s.wordpress.org/extend/plugins/woocommerce-credit-card-interest-table/screenshot-6.png)
 
 
 ## Frequently Asked Questions ##
@@ -66,9 +66,9 @@ Display a table with the credit card interest in your WooCommerce.
 
 ## License ##
 
-This file is part of WooCommerce Credit Card Interest Table.
-**WooCommerce Credit Card Interest Table is free software:** you can redistribute it and/or modify it under the terms of the GNU General Public License as published  
-by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+WooCommerce Credit Card Interest Table is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+
 WooCommerce Credit Card Interest Table is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-You should have received a copy of the GNU General Public License along with Author Bio Box. If not, see <http://www.gnu.org/licenses/>.
+
+You should have received a copy of the GNU General Public License along with WooCommerce Credit Card Interest Table. If not, see <http://www.gnu.org/licenses/>.
