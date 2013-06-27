@@ -1,4 +1,4 @@
-=== WooCommerce Credit Card Interest Table ===
+=== WooCommerce Installments Info ===
 Contributors: claudiosanches, rstancato
 Donate link: http://claudiosmweb.com/doacoes/
 Tags: woocommerce, credit card, interest table, interest
@@ -54,9 +54,9 @@ Display a table with the credit card interest in your WooCommerce.
 
 == License ==
 
-WooCommerce Credit Card Interest Table is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+WooCommerce Installments Info is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
 
-WooCommerce Credit Card Interest Table is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
+WooCommerce Installments Info is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-You should have received a copy of the GNU General Public License along with WooCommerce Credit Card Interest Table. If not, see <http://www.gnu.org/licenses/>.
+You should have received a copy of the GNU General Public License along with WooCommerce Installments Info. If not, see <http://www.gnu.org/licenses/>.

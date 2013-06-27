@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: WooCommerce Credit Card Interest Table
+ * Plugin Name: WooCommerce Installments Info
  * Plugin URI: http://www.claudiosmweb.com/
  * Description: Credit Card Interest Table
  * Author: claudiosanches, rstancato
@@ -12,9 +12,9 @@
  */
 
 /**
- * WC_CreditCardInterestTable class.
+ * WC_Installments_Info class.
  */
-class WC_CreditCardInterestTable {
+class WC_Installments_Info {
 
     /**
      * Construct.
@@ -904,7 +904,7 @@ function wcccit_fallback_notice() {
  * Ref: http://wcdocs.woothemes.com/codex/extending/create-a-plugin/.
  */
 if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
-    $wcCreditCardInterestTable = new WC_CreditCardInterestTable();
+    $wcCreditCardInterestTable = new WC_Installments_Info();
 } else {
     add_action( 'admin_notices', 'wcccit_fallback_notice' );
 }
