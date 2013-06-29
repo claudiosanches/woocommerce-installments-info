@@ -1,5 +1,7 @@
 <?php
 
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
+
 /**
  * WC_Installments_Info class.
  */
@@ -10,11 +12,8 @@ class WC_Installments_Info {
      */
     public function __construct() {
 
-        // Load textdomain.
-        add_action( 'plugins_loaded', array( &$this, 'languages' ), 0 );
-
         // Add view in WooCommerce products single.
-        $views = get_option( 'wcccit_design' );
+        $views = get_option( 'wcii_design' );
 
         if ( $views['display'] == 0 ) {
             add_action( 'woocommerce_after_single_product_summary', array( &$this, 'print_view' ), 50 );
@@ -30,7 +29,7 @@ class WC_Installments_Info {
         }
 
         // Add Shortcode.
-        add_shortcode( 'wcccit', array( &$this, 'shortcode' ) );
+        add_shortcode( 'wcii', array( &$this, 'shortcode' ) );
         add_action( 'init', array( &$this, 'shortcode_buttons_init' ) );
 
         // Front-end scripts.
@@ -38,19 +37,12 @@ class WC_Installments_Info {
     }
 
     /**
-     * Load translations.
-     */
-    public function languages() {
-
-    }
-
-    /**
      * Front-End Scripts.
      */
     public function front_scripts() {
         if ( is_product() ) {
-            wp_register_style( 'wcccit', plugins_url( 'css/styles.css', __FILE__ ), array(), null, 'all' );
-            wp_enqueue_style( 'wcccit' );
+            wp_register_style( 'wcii', plugins_url( 'css/styles.css', __FILE__ ), array(), null, 'all' );
+            wp_enqueue_style( 'wcii' );
         }
     }
 
@@ -131,10 +123,10 @@ class WC_Installments_Info {
         $calculation_type ) {
 
         // Get design options.
-        $design = get_option( 'wcccit_design' );
+        $design = get_option( 'wcii_design' );
 
         // Get icons
-        $icons = get_option( 'wcccit_icons', '' );
+        $icons = get_option( 'wcii_icons', '' );
 
         // Float ou margin.
         $align = ( $design['float'] == 'center' ) ? ' margin-left: auto; margin-right: auto' : ' float: ' . $design['float'];
@@ -182,9 +174,9 @@ class WC_Installments_Info {
                 if ( $parcel_value >= $iota ) {
 
                     if ( $p <= $without_interest ) {
-                        $table .= '<span class="card-info" style="color: ' . $design['without'] . '; background: ' . $background . '; border-color: ' . $design['border'] . ';">' . sprintf( __( '%s%sx%s of %s %swithout interest%s', 'wcccit' ), '<strong>', $p, '</strong>', $this->format_price( $parcel_value ), '<em>', '</em>' ) . '</span>';
+                        $table .= '<span class="card-info" style="color: ' . $design['without'] . '; background: ' . $background . '; border-color: ' . $design['border'] . ';">' . sprintf( __( '%s%sx%s of %s %swithout interest%s', 'wcii' ), '<strong>', $p, '</strong>', $this->format_price( $parcel_value ), '<em>', '</em>' ) . '</span>';
                     } else {
-                        $table .= '<span class="card-info" style="background: ' . $background . '; border-color: ' . $design['border'] . ';">' . sprintf( __( '%s%sx%s of %s %swith interest%s', 'wcccit' ), '<strong>', $p, '</strong>' , $this->format_price( $parcel_value ), '<em>', '</em>' ) . '</span>';
+                        $table .= '<span class="card-info" style="background: ' . $background . '; border-color: ' . $design['border'] . ';">' . sprintf( __( '%s%sx%s of %s %swith interest%s', 'wcii' ), '<strong>', $p, '</strong>' , $this->format_price( $parcel_value ), '<em>', '</em>' ) . '</span>';
                     }
 
                 }
@@ -209,12 +201,12 @@ class WC_Installments_Info {
 
             // Show interest info.
             if ( $without_interest < $parcel_maximum ) {
-                $table .= '<span>' . sprintf( __( 'Interest of %s%s per month', 'wcccit' ), $this->number_format( $interest ), '%' ) . '</span>';
+                $table .= '<span>' . sprintf( __( 'Interest of %s%s per month', 'wcii' ), $this->number_format( $interest ), '%' ) . '</span>';
             }
 
             // Show maximum parcel info.
             if ( $iota > 0 ) {
-                $table .= '<span>' . sprintf( __( ' (parcel minimum of %s)', 'wcccit' ), $this->format_price( $iota ) ) . '</span>';
+                $table .= '<span>' . sprintf( __( ' (parcel minimum of %s)', 'wcii' ), $this->format_price( $iota ) ) . '</span>';
             }
 
             // Close the details.
@@ -224,7 +216,7 @@ class WC_Installments_Info {
             if ( $icons != '' ) {
 
                 $table .= '<div id="wc-credit-cart-table-icons">';
-                $table .= '<strong>' . __( 'Pay with: ', 'wcccit' ) . '</strong>';
+                $table .= '<strong>' . __( 'Pay with: ', 'wcii' ) . '</strong>';
 
                 foreach ( $icons as $key => $value ) {
                     $table .= sprintf( '<span class="card-icons card-%s"></span>', $value );
@@ -249,7 +241,7 @@ class WC_Installments_Info {
         global $product;
 
         // Get settings.
-        $default = get_option( 'wcccit_settings' );
+        $default = get_option( 'wcii_settings' );
 
         echo $this->view( $product->get_price(), $default['parcel_maximum'], $default['parcel_minimum'], $default['iota'], $default['without_interest'], $default['interest'], $default['calculation_type'] );
     }
@@ -258,7 +250,7 @@ class WC_Installments_Info {
      * Create a new tab.
      */
     public function tab_view() {
-        echo '<li class="wcccit_tab"><a href="#tab-wcccit">' . apply_filters( 'wcccit_tab_title' , __( 'Credit Card Parcels', 'wcccit' ) ) . '</a></li>';
+        echo '<li class="wcii_tab"><a href="#tab-wcii">' . apply_filters( 'wcii_tab_title' , __( 'Credit Card Parcels', 'wcii' ) ) . '</a></li>';
     }
 
     /**
@@ -268,9 +260,9 @@ class WC_Installments_Info {
         global $product;
 
         // Get settings.
-        $default = get_option( 'wcccit_settings' );
+        $default = get_option( 'wcii_settings' );
 
-        $html = '<div class="panel entry-content" id="tab-wcccit">';
+        $html = '<div class="panel entry-content" id="tab-wcii">';
             $html .= $this->view( $product->price, $default['parcel_maximum'], $default['parcel_minimum'], $default['iota'], $default['without_interest'], $default['interest'], $default['calculation_type'] );
         $html .= '</div>';
 
@@ -284,7 +276,7 @@ class WC_Installments_Info {
         global $product;
 
         // Get default settings.
-        $default = get_option( 'wcccit_settings' );
+        $default = get_option( 'wcii_settings' );
 
         extract(
             shortcode_atts(
@@ -307,7 +299,7 @@ class WC_Installments_Info {
      * Add custom buttons in TinyMCE.
      */
     public function shortcode_register_buttons( $buttons ) {
-        array_push( $buttons, '|', 'wcccit' );
+        array_push( $buttons, '|', 'wcii' );
         return $buttons;
     }
 
@@ -315,7 +307,7 @@ class WC_Installments_Info {
      * Register button scripts.
      */
     public function shortcode_add_buttons( $plugin_array ) {
-        $plugin_array['wcccit'] = plugins_url( 'tinymce/wcccit.js' , __FILE__ );
+        $plugin_array['wcii'] = plugins_url( 'tinymce/wcii.js' , __FILE__ );
         return $plugin_array;
     }
 

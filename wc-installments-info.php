@@ -11,8 +11,7 @@
  * Domain Path: /languages/
  */
 
-// Exit if accessed directly.
-if ( ! defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
 // Sets the plugin path.
 define( 'WC_INSTALLMENTS_INFO_PATH', plugin_dir_path( __FILE__ ) );
@@ -30,11 +29,10 @@ add_action( 'plugins_loaded', 'wcii_plugin', 0 );
  * WooCommerce fallback notice.
  */
 function wcii_fallback_notice() {
-    $message = '<div class="error">';
-        $message .= '<p>' . sprintf( __( 'WooCommerce Credit Card Interest Table depends on <a href="%s">WooCommerce</a> to work!' , 'wcii' ), esc_url( 'http://wordpress.org/extend/plugins/woocommerce/' ) ) . '</p>';
-    $message .= '</div>';
-
-    echo $message;
+    echo '<div class="error"><p>' . sprintf(
+        __( 'WooCommerce Installments Info depends on %s to work!' , 'wcii' ),
+        '<a href="http://wordpress.org/extend/plugins/woocommerce/">WooCommerce</a>'
+    ) . '</p></div>';
 }
 
 /**

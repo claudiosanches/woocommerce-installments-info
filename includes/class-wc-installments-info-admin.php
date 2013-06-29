@@ -18,7 +18,7 @@ class WC_Installments_Info_Admin {
         add_action( 'admin_init', array( &$this, 'plugin_settings' ) );
 
         // Back-end scripts.
-        if ( isset( $_GET['page'] ) && $_GET['page'] == 'wcccit' )
+        if ( isset( $_GET['page'] ) && $_GET['page'] == 'wcii' )
             add_action( 'admin_enqueue_scripts', array( &$this, 'admin_scripts' ) );
 
     }
@@ -37,11 +37,11 @@ class WC_Installments_Info_Admin {
             'calculation_type' => '0'
         );
 
-        add_option( 'wcccit_settings', $settings );
+        add_option( 'wcii_settings', $settings );
 
         $design = array(
             'display' => '0',
-            'title'   => __( 'Credit Card Parcels', 'wcccit' ),
+            'title'   => __( 'Credit Card Parcels', 'wcii' ),
             'float'   => 'none',
             'width'   => '100%',
             'border'  => '#DDDDDD',
@@ -50,7 +50,7 @@ class WC_Installments_Info_Admin {
             'without' => '#006600'
         );
 
-        add_option( 'wcccit_design', $design );
+        add_option( 'wcii_design', $design );
     }
 
     /**
@@ -60,8 +60,8 @@ class WC_Installments_Info_Admin {
         wp_enqueue_script( 'jquery' );
         wp_enqueue_script( 'farbtastic' );
         wp_enqueue_style( 'farbtastic' );
-        wp_register_style( 'wcccit', plugins_url( 'css/styles.css', __FILE__ ), array(), null, 'all' );
-        wp_enqueue_style( 'wcccit' );
+        wp_register_style( 'wcii', plugins_url( 'css/styles.css', __FILE__ ), array(), null, 'all' );
+        wp_enqueue_style( 'wcii' );
     }
 
 
@@ -70,7 +70,7 @@ class WC_Installments_Info_Admin {
      * Add Credit Card Interest Table menu.
      */
     public function menu() {
-        add_submenu_page( 'woocommerce', __( 'Credit Card Interest Table', 'wcccit' ), __( 'Credit Card Interest Table', 'wcccit' ), 'manage_options', 'wcccit', array( &$this, 'settings_page' ) );
+        add_submenu_page( 'woocommerce', __( 'Credit Card Interest Table', 'wcii' ), __( 'Credit Card Interest Table', 'wcii' ), 'manage_options', 'wcii', array( &$this, 'settings_page' ) );
     }
 
     /**
@@ -89,20 +89,20 @@ class WC_Installments_Info_Admin {
             <div class="wrap">
                 <?php screen_icon( 'options-general' ); ?>
                 <h2 class="nav-tab-wrapper">
-                <a href="admin.php?page=wcccit&amp;tab=settings" class="nav-tab <?php echo $current_tab == 'settings' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Settings', 'wcccit' ); ?></a><a href="admin.php?page=wcccit&amp;tab=design" class="nav-tab <?php echo $current_tab == 'design' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Design', 'wcccit' ); ?></a><a href="admin.php?page=wcccit&amp;tab=icons" class="nav-tab <?php echo $current_tab == 'icons' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Icons', 'wcccit' ); ?></a>
+                <a href="admin.php?page=wcii&amp;tab=settings" class="nav-tab <?php echo $current_tab == 'settings' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Settings', 'wcii' ); ?></a><a href="admin.php?page=wcii&amp;tab=design" class="nav-tab <?php echo $current_tab == 'design' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Design', 'wcii' ); ?></a><a href="admin.php?page=wcii&amp;tab=icons" class="nav-tab <?php echo $current_tab == 'icons' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Icons', 'wcii' ); ?></a>
                 </h2>
                 <?php settings_errors(); ?>
                 <form method="post" action="options.php">
                     <?php
                         if ( $current_tab == 'design' ) {
-                            settings_fields( 'wcccit_design' );
-                            do_settings_sections( 'wcccit_design' );
+                            settings_fields( 'wcii_design' );
+                            do_settings_sections( 'wcii_design' );
                         } elseif ( $current_tab == 'icons' ) {
-                            settings_fields( 'wcccit_icons' );
-                            do_settings_sections( 'wcccit_icons' );
+                            settings_fields( 'wcii_icons' );
+                            do_settings_sections( 'wcii_icons' );
                         } else {
-                            settings_fields( 'wcccit_settings' );
-                            do_settings_sections( 'wcccit_settings' );
+                            settings_fields( 'wcii_settings' );
+                            do_settings_sections( 'wcii_settings' );
                         }
 
                         submit_button();
@@ -116,9 +116,9 @@ class WC_Installments_Info_Admin {
      *  Plugin settings form fields.
      */
     public function plugin_settings() {
-        $option = 'wcccit_settings';
-        $design = 'wcccit_design';
-        $icons = 'wcccit_icons';
+        $option = 'wcii_settings';
+        $design = 'wcii_design';
+        $icons = 'wcii_icons';
 
         // Create option in wp_options.
         if ( get_option( $option ) == false ) {
@@ -134,14 +134,14 @@ class WC_Installments_Info_Admin {
         // set Section.
         add_settings_section(
             'settings_section',
-            __( 'Credit Card Interest Settings', 'wcccit' ),
+            __( 'Credit Card Interest Settings', 'wcii' ),
             '__return_false',
             $option
         );
 
         add_settings_field(
             'parcel_maximum',
-            __( 'Number of parcels', 'wcccit' ),
+            __( 'Number of parcels', 'wcii' ),
             array( &$this , 'text_element_callback' ),
             $option,
             'settings_section',
@@ -154,7 +154,7 @@ class WC_Installments_Info_Admin {
 
         add_settings_field(
             'parcel_minimum',
-            __( 'Parcel minimum', 'wcccit' ),
+            __( 'Parcel minimum', 'wcii' ),
             array( &$this , 'text_element_callback' ),
             $option,
             'settings_section',
@@ -167,7 +167,7 @@ class WC_Installments_Info_Admin {
 
         add_settings_field(
             'iota',
-            __( 'iota', 'wcccit' ),
+            __( 'iota', 'wcii' ),
             array( &$this , 'text_element_callback' ),
             $option,
             'settings_section',
@@ -180,7 +180,7 @@ class WC_Installments_Info_Admin {
 
         add_settings_field(
             'without_interest',
-            __( 'Parcels without interest', 'wcccit' ),
+            __( 'Parcels without interest', 'wcii' ),
             array( &$this , 'text_element_callback' ),
             $option,
             'settings_section',
@@ -193,7 +193,7 @@ class WC_Installments_Info_Admin {
 
         add_settings_field(
             'interest',
-            __( 'Interest', 'wcccit' ),
+            __( 'Interest', 'wcii' ),
             array( &$this , 'text_element_callback' ),
             $option,
             'settings_section',
@@ -206,7 +206,7 @@ class WC_Installments_Info_Admin {
 
         add_settings_field(
             'calculation_type',
-            __( 'Calculation type', 'wcccit' ),
+            __( 'Calculation type', 'wcii' ),
             array( &$this , 'select_element_callback' ),
             $option,
             'settings_section',
@@ -215,24 +215,24 @@ class WC_Installments_Info_Admin {
                 'id' => 'calculation_type',
                 'default' => '0',
                 'items' => array(
-                    '0' => __( 'Amortization schedule', 'wcccit' ),
-                    '1' => __( 'Simple interest', 'wcccit' ),
+                    '0' => __( 'Amortization schedule', 'wcii' ),
+                    '1' => __( 'Simple interest', 'wcii' ),
                 ),
-                'description' => __( 'Amortization schedule: See details in <a href="http://en.wikipedia.org/wiki/Amortization_schedule">Wikipedia</a><br />Simple interest: See details in <a href="http://en.wikipedia.org/wiki/Simple_interest#Simple_interest">Wikipedia</a>', 'wcccit' )
+                'description' => __( 'Amortization schedule: See details in <a href="http://en.wikipedia.org/wiki/Amortization_schedule">Wikipedia</a><br />Simple interest: See details in <a href="http://en.wikipedia.org/wiki/Simple_interest#Simple_interest">Wikipedia</a>', 'wcii' )
             )
         );
 
         // Set Section.
         add_settings_section(
             'design_section',
-            __( 'Table Design', 'wcccit' ),
+            __( 'Table Design', 'wcii' ),
             '__return_false',
             $design
         );
 
         add_settings_field(
             'display',
-            __( 'Display in', 'wcccit' ),
+            __( 'Display in', 'wcii' ),
             array( &$this , 'select_element_callback' ),
             $design,
             'design_section',
@@ -241,25 +241,25 @@ class WC_Installments_Info_Admin {
                 'id' => 'display',
                 'default' => '0',
                 'items' => array(
-                    '0' => __( 'Product bottom', 'wcccit' ),
-                    '1' => __( 'Before product tab', 'wcccit' ),
-                    '2' => __( 'Product tab', 'wcccit' ),
-                    '3' => __( 'After add to cart button', 'wcccit' ),
-                    '4' => __( 'No display', 'wcccit' ),
+                    '0' => __( 'Product bottom', 'wcii' ),
+                    '1' => __( 'Before product tab', 'wcii' ),
+                    '2' => __( 'Product tab', 'wcii' ),
+                    '3' => __( 'After add to cart button', 'wcii' ),
+                    '4' => __( 'No display', 'wcii' ),
                 )
             )
         );
 
         add_settings_field(
             'title',
-            __( 'Table Title', 'wcccit' ),
+            __( 'Table Title', 'wcii' ),
             array( &$this , 'text_element_callback' ),
             $design,
             'design_section',
             array(
                 'menu' => $design,
                 'id' => 'title',
-                'default' => __( 'Credit Card Parcels', 'wcccit' ),
+                'default' => __( 'Credit Card Parcels', 'wcii' ),
                 'class' => 'regular-text'
             )
         );
@@ -267,14 +267,14 @@ class WC_Installments_Info_Admin {
         // Set Section.
         add_settings_section(
             'styles_section',
-            __( 'Table Styles', 'wcccit' ),
+            __( 'Table Styles', 'wcii' ),
             '__return_false',
             $design
         );
 
         add_settings_field(
             'float',
-            __( 'Float', 'wcccit' ),
+            __( 'Float', 'wcii' ),
             array( &$this , 'select_element_callback' ),
             $design,
             'styles_section',
@@ -283,17 +283,17 @@ class WC_Installments_Info_Admin {
                 'id' => 'float',
                 'default' => 'none',
                 'items' => array(
-                    'none' => __( 'None', 'wcccit' ),
-                    'left' => __( 'Left', 'wcccit' ),
-                    'right' => __( 'Right', 'wcccit' ),
-                    'center' => __( 'Center', 'wcccit' ),
+                    'none' => __( 'None', 'wcii' ),
+                    'left' => __( 'Left', 'wcii' ),
+                    'right' => __( 'Right', 'wcii' ),
+                    'center' => __( 'Center', 'wcii' ),
                 )
             )
         );
 
         add_settings_field(
             'width',
-            __( 'Width', 'wcccit' ),
+            __( 'Width', 'wcii' ),
             array( &$this , 'text_element_callback' ),
             $design,
             'styles_section',
@@ -301,13 +301,13 @@ class WC_Installments_Info_Admin {
                 'menu' => $design,
                 'id' => 'width',
                 'default' => '100%',
-                'description' => __( 'Value with %, px or em', 'wcccit' )
+                'description' => __( 'Value with %, px or em', 'wcii' )
             )
         );
 
         add_settings_field(
             'border',
-            __( 'Border color', 'wcccit' ),
+            __( 'Border color', 'wcii' ),
             array( &$this , 'color_element_callback' ),
             $design,
             'styles_section',
@@ -320,7 +320,7 @@ class WC_Installments_Info_Admin {
 
         add_settings_field(
             'odd',
-            __( 'Odd background' , 'wcccit' ),
+            __( 'Odd background' , 'wcii' ),
             array( &$this , 'color_element_callback' ),
             $design,
             'styles_section',
@@ -333,7 +333,7 @@ class WC_Installments_Info_Admin {
 
         add_settings_field(
             'even',
-            __( 'Even background', 'wcccit' ),
+            __( 'Even background', 'wcii' ),
             array( &$this , 'color_element_callback' ),
             $design,
             'styles_section',
@@ -346,7 +346,7 @@ class WC_Installments_Info_Admin {
 
         add_settings_field(
             'without',
-            __( 'Without interest color', 'wcccit' ),
+            __( 'Without interest color', 'wcii' ),
             array( &$this , 'color_element_callback' ),
             $design,
             'styles_section',
@@ -360,14 +360,14 @@ class WC_Installments_Info_Admin {
         // Set Section.
         add_settings_section(
             'icons_section',
-            __( '', 'wcccit' ),
+            __( '', 'wcii' ),
             '__return_false',
             $icons
         );
 
         add_settings_field(
             'cards',
-            __( 'Cards', 'wcccit' ),
+            __( 'Cards', 'wcii' ),
             array( &$this , 'checkbox_cards_element_callback' ),
             $icons,
             'icons_section',
@@ -546,6 +546,6 @@ class WC_Installments_Info_Admin {
         }
 
         // Return the array processing any additional functions filtered by this action.
-        return apply_filters( 'wcccit_validate_input', $output, $input );
+        return apply_filters( 'wcii_validate_input', $output, $input );
     }
 }
