@@ -18,7 +18,7 @@ class WC_Installments_Info_Admin {
         add_action( 'admin_init', array( &$this, 'plugin_settings' ) );
 
         // Back-end scripts.
-        if ( isset( $_GET['page'] ) && $_GET['page'] == 'wcii' )
+        if ( isset( $_GET['page'] ) && $_GET['page'] == 'wc-installments-info' )
             add_action( 'admin_enqueue_scripts', array( &$this, 'admin_scripts' ) );
 
     }
@@ -29,19 +29,19 @@ class WC_Installments_Info_Admin {
     public function default_settings() {
 
         $settings = array(
-            'parcel_maximum'   => '12',
-            'parcel_minimum'   => '1',
-            'iota'             => '5',
-            'without_interest' => '1',
-            'interest'         => '2.49',
-            'calculation_type' => '0'
+            'installment_maximum' => 12,
+            'installment_minimum' => 1,
+            'iota'                => 5,
+            'without_interest'    => 1,
+            'interest'            => 2.49,
+            'calculation_type'    => 0
         );
 
         add_option( 'wcii_settings', $settings );
 
         $design = array(
-            'display' => '0',
-            'title'   => __( 'Credit Card Parcels', 'wcii' ),
+            'display' => 0,
+            'title'   => __( 'Credit Card Installments', 'wcii' ),
             'float'   => 'none',
             'width'   => '100%',
             'border'  => '#DDDDDD',
@@ -54,23 +54,39 @@ class WC_Installments_Info_Admin {
     }
 
     /**
-     * Admin Scripts.
+     * Load options scripts.
+     *
+     * @return void
      */
     public function admin_scripts() {
+        // jQuery.
         wp_enqueue_script( 'jquery' );
-        wp_enqueue_script( 'farbtastic' );
-        wp_enqueue_style( 'farbtastic' );
-        wp_register_style( 'wcii', plugins_url( 'css/styles.css', __FILE__ ), array(), null, 'all' );
-        wp_enqueue_style( 'wcii' );
+
+        // Color Picker.
+        wp_enqueue_style( 'wp-color-picker' );
+        wp_enqueue_script( 'wp-color-picker' );
+
+        // Plugin scripts.
+        wp_register_script( 'wcii-admin', WC_INSTALLMENTS_INFO_URL . 'assets/js/admin.js', array(), null, 'all' );
+        wp_enqueue_script( 'wcii-admin' );
+
+        // Plugin styles.
+        wp_register_style( 'wcii-styles', WC_INSTALLMENTS_INFO_URL . 'assets/css/styles.css', array(), null, 'all' );
+        wp_enqueue_style( 'wcii-styles' );
     }
 
-
-
     /**
-     * Add Credit Card Interest Table menu.
+     * Add Installments Info menu.
      */
     public function menu() {
-        add_submenu_page( 'woocommerce', __( 'Credit Card Interest Table', 'wcii' ), __( 'Credit Card Interest Table', 'wcii' ), 'manage_options', 'wcii', array( &$this, 'settings_page' ) );
+        add_submenu_page(
+            'woocommerce',
+            __( 'Installments Info', 'wcii' ),
+            __( 'Installments Info', 'wcii' ),
+            'manage_options',
+            'wc-installments-info',
+            array( &$this, 'settings_page' )
+        );
     }
 
     /**
@@ -79,17 +95,16 @@ class WC_Installments_Info_Admin {
     public function settings_page() {
         // Create tabs current class.
         $current_tab = '';
-        if ( isset($_GET['tab'] ) ) {
+        if ( isset( $_GET['tab'] ) )
             $current_tab = $_GET['tab'];
-        } else {
+        else
             $current_tab = 'settings';
-        }
 
         ?>
             <div class="wrap">
                 <?php screen_icon( 'options-general' ); ?>
                 <h2 class="nav-tab-wrapper">
-                <a href="admin.php?page=wcii&amp;tab=settings" class="nav-tab <?php echo $current_tab == 'settings' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Settings', 'wcii' ); ?></a><a href="admin.php?page=wcii&amp;tab=design" class="nav-tab <?php echo $current_tab == 'design' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Design', 'wcii' ); ?></a><a href="admin.php?page=wcii&amp;tab=icons" class="nav-tab <?php echo $current_tab == 'icons' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Icons', 'wcii' ); ?></a>
+                <a href="admin.php?page=wc-installments-info&amp;tab=settings" class="nav-tab <?php echo $current_tab == 'settings' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Settings', 'wcii' ); ?></a><a href="admin.php?page=wc-installments-info&amp;tab=design" class="nav-tab <?php echo $current_tab == 'design' ? 'nav-tab-active' : ''; ?>"><?php _e( 'Design', 'wcii' ); ?></a>
                 </h2>
                 <?php settings_errors(); ?>
                 <form method="post" action="options.php">
@@ -97,9 +112,6 @@ class WC_Installments_Info_Admin {
                         if ( $current_tab == 'design' ) {
                             settings_fields( 'wcii_design' );
                             do_settings_sections( 'wcii_design' );
-                        } elseif ( $current_tab == 'icons' ) {
-                            settings_fields( 'wcii_icons' );
-                            do_settings_sections( 'wcii_icons' );
                         } else {
                             settings_fields( 'wcii_settings' );
                             do_settings_sections( 'wcii_settings' );
@@ -116,51 +128,46 @@ class WC_Installments_Info_Admin {
      *  Plugin settings form fields.
      */
     public function plugin_settings() {
-        $option = 'wcii_settings';
+        $settings = 'wcii_settings';
         $design = 'wcii_design';
-        $icons = 'wcii_icons';
 
         // Create option in wp_options.
-        if ( get_option( $option ) == false ) {
-            add_option( $option );
-        }
-        if ( get_option( $design ) == false ) {
-            add_option( $design );
-        }
-        if ( get_option( $icons ) == false ) {
-            add_option( $icons );
-        }
+        if ( get_option( $settings ) == false )
+            add_option( $settings );
 
-        // set Section.
+        if ( get_option( $design ) == false )
+            add_option( $design );
+
+
         add_settings_section(
-            'settings_section',
+            'wcii_settings_section',
             __( 'Credit Card Interest Settings', 'wcii' ),
             '__return_false',
-            $option
+            $settings
         );
 
         add_settings_field(
-            'parcel_maximum',
-            __( 'Number of parcels', 'wcii' ),
-            array( &$this , 'text_element_callback' ),
-            $option,
-            'settings_section',
+            'installment_maximum',
+            __( 'Number of Installments', 'wcii' ),
+            array( &$this , 'callback_text' ),
+            $settings,
+            'wcii_settings_section',
             array(
-                'menu' => $option,
-                'id' => 'parcel_maximum',
+                'tab' => $settings,
+                'id' => 'installment_maximum',
                 'default' => '12'
             )
         );
 
         add_settings_field(
-            'parcel_minimum',
-            __( 'Parcel minimum', 'wcii' ),
-            array( &$this , 'text_element_callback' ),
-            $option,
-            'settings_section',
+            'installment_minimum',
+            __( 'Installment minimum', 'wcii' ),
+            array( &$this , 'callback_text' ),
+            $settings,
+            'wcii_settings_section',
             array(
-                'menu' => $option,
-                'id' => 'parcel_minimum',
+                'tab' => $settings,
+                'id' => 'installment_minimum',
                 'default' => '1'
             )
         );
@@ -168,11 +175,11 @@ class WC_Installments_Info_Admin {
         add_settings_field(
             'iota',
             __( 'iota', 'wcii' ),
-            array( &$this , 'text_element_callback' ),
-            $option,
-            'settings_section',
+            array( &$this , 'callback_text' ),
+            $settings,
+            'wcii_settings_section',
             array(
-                'menu' => $option,
+                'tab' => $settings,
                 'id' => 'iota',
                 'default' => '5'
             )
@@ -180,12 +187,12 @@ class WC_Installments_Info_Admin {
 
         add_settings_field(
             'without_interest',
-            __( 'Parcels without interest', 'wcii' ),
-            array( &$this , 'text_element_callback' ),
-            $option,
-            'settings_section',
+            __( 'Installments without interest', 'wcii' ),
+            array( &$this , 'callback_text' ),
+            $settings,
+            'wcii_settings_section',
             array(
-                'menu' => $option,
+                'tab' => $settings,
                 'id' => 'without_interest',
                 'default' => '1'
             )
@@ -194,11 +201,11 @@ class WC_Installments_Info_Admin {
         add_settings_field(
             'interest',
             __( 'Interest', 'wcii' ),
-            array( &$this , 'text_element_callback' ),
-            $option,
-            'settings_section',
+            array( &$this , 'callback_text' ),
+            $settings,
+            'wcii_settings_section',
             array(
-                'menu' => $option,
+                'tab' => $settings,
                 'id' => 'interest',
                 'default' => '2.49'
             )
@@ -207,14 +214,14 @@ class WC_Installments_Info_Admin {
         add_settings_field(
             'calculation_type',
             __( 'Calculation type', 'wcii' ),
-            array( &$this , 'select_element_callback' ),
-            $option,
-            'settings_section',
+            array( &$this , 'callback_select' ),
+            $settings,
+            'wcii_settings_section',
             array(
-                'menu' => $option,
+                'tab' => $settings,
                 'id' => 'calculation_type',
                 'default' => '0',
-                'items' => array(
+                'options' => array(
                     '0' => __( 'Amortization schedule', 'wcii' ),
                     '1' => __( 'Simple interest', 'wcii' ),
                 ),
@@ -222,9 +229,8 @@ class WC_Installments_Info_Admin {
             )
         );
 
-        // Set Section.
         add_settings_section(
-            'design_section',
+            'wcii_table_design_section',
             __( 'Table Design', 'wcii' ),
             '__return_false',
             $design
@@ -233,14 +239,14 @@ class WC_Installments_Info_Admin {
         add_settings_field(
             'display',
             __( 'Display in', 'wcii' ),
-            array( &$this , 'select_element_callback' ),
+            array( &$this , 'callback_select' ),
             $design,
-            'design_section',
+            'wcii_table_design_section',
             array(
-                'menu' => $design,
+                'tab' => $design,
                 'id' => 'display',
                 'default' => '0',
-                'items' => array(
+                'options' => array(
                     '0' => __( 'Product bottom', 'wcii' ),
                     '1' => __( 'Before product tab', 'wcii' ),
                     '2' => __( 'Product tab', 'wcii' ),
@@ -253,20 +259,19 @@ class WC_Installments_Info_Admin {
         add_settings_field(
             'title',
             __( 'Table Title', 'wcii' ),
-            array( &$this , 'text_element_callback' ),
+            array( &$this , 'callback_text' ),
             $design,
-            'design_section',
+            'wcii_table_design_section',
             array(
-                'menu' => $design,
+                'tab' => $design,
                 'id' => 'title',
-                'default' => __( 'Credit Card Parcels', 'wcii' ),
+                'default' => __( 'Credit Card Installments', 'wcii' ),
                 'class' => 'regular-text'
             )
         );
 
-        // Set Section.
         add_settings_section(
-            'styles_section',
+            'wcii_table_styles_section',
             __( 'Table Styles', 'wcii' ),
             '__return_false',
             $design
@@ -275,14 +280,14 @@ class WC_Installments_Info_Admin {
         add_settings_field(
             'float',
             __( 'Float', 'wcii' ),
-            array( &$this , 'select_element_callback' ),
+            array( &$this , 'callback_select' ),
             $design,
-            'styles_section',
+            'wcii_table_styles_section',
             array(
-                'menu' => $design,
+                'tab' => $design,
                 'id' => 'float',
                 'default' => 'none',
-                'items' => array(
+                'options' => array(
                     'none' => __( 'None', 'wcii' ),
                     'left' => __( 'Left', 'wcii' ),
                     'right' => __( 'Right', 'wcii' ),
@@ -294,11 +299,11 @@ class WC_Installments_Info_Admin {
         add_settings_field(
             'width',
             __( 'Width', 'wcii' ),
-            array( &$this , 'text_element_callback' ),
+            array( &$this , 'callback_text' ),
             $design,
-            'styles_section',
+            'wcii_table_styles_section',
             array(
-                'menu' => $design,
+                'tab' => $design,
                 'id' => 'width',
                 'default' => '100%',
                 'description' => __( 'Value with %, px or em', 'wcii' )
@@ -308,11 +313,11 @@ class WC_Installments_Info_Admin {
         add_settings_field(
             'border',
             __( 'Border color', 'wcii' ),
-            array( &$this , 'color_element_callback' ),
+            array( &$this , 'callback_color' ),
             $design,
-            'styles_section',
+            'wcii_table_styles_section',
             array(
-                'menu' => $design,
+                'tab' => $design,
                 'id' => 'border',
                 'default' => '#DDDDDD',
             )
@@ -321,11 +326,11 @@ class WC_Installments_Info_Admin {
         add_settings_field(
             'odd',
             __( 'Odd background' , 'wcii' ),
-            array( &$this , 'color_element_callback' ),
+            array( &$this , 'callback_color' ),
             $design,
-            'styles_section',
+            'wcii_table_styles_section',
             array(
-                'menu' => $design,
+                'tab' => $design,
                 'id' => 'odd',
                 'default' => '#F0F9E6',
             )
@@ -334,11 +339,11 @@ class WC_Installments_Info_Admin {
         add_settings_field(
             'even',
             __( 'Even background', 'wcii' ),
-            array( &$this , 'color_element_callback' ),
+            array( &$this , 'callback_color' ),
             $design,
-            'styles_section',
+            'wcii_table_styles_section',
             array(
-                'menu' => $design,
+                'tab' => $design,
                 'id' => 'even',
                 'default' => '#FFFFFF',
             )
@@ -347,11 +352,11 @@ class WC_Installments_Info_Admin {
         add_settings_field(
             'without',
             __( 'Without interest color', 'wcii' ),
-            array( &$this , 'color_element_callback' ),
+            array( &$this , 'callback_color' ),
             $design,
-            'styles_section',
+            'wcii_table_styles_section',
             array(
-                'menu' => $design,
+                'tab' => $design,
                 'id' => 'without',
                 'default' => '#006600',
             )
@@ -359,22 +364,22 @@ class WC_Installments_Info_Admin {
 
         // Set Section.
         add_settings_section(
-            'icons_section',
+            'wcii_table_icons_section',
             __( '', 'wcii' ),
             '__return_false',
-            $icons
+            $design
         );
 
         add_settings_field(
             'cards',
-            __( 'Cards', 'wcii' ),
-            array( &$this , 'checkbox_cards_element_callback' ),
-            $icons,
-            'icons_section',
+            __( 'Credit Cards', 'wcii' ),
+            array( &$this , 'callback_checkbox_cards' ),
+            $design,
+            'wcii_table_icons_section',
             array(
-                'menu' => $icons,
+                'tab' => $design,
                 'id' => 'cards',
-                'items' => array(
+                'options' => array(
                     'visa' => 'visa',
                     'master' => 'master',
                     'hypercard' => 'hypercard',
@@ -386,166 +391,145 @@ class WC_Installments_Info_Admin {
         );
 
         // Register settings.
-        register_setting( $option, $option, array( &$this, 'validate_options' ) );
-        register_setting( $icons, $icons, array( &$this, 'validate_options' ) );
-        register_setting( $design, $design, array( &$this, 'validate_options' ) );
+        register_setting( $settings, $settings, array( &$this, 'validate_input' ) );
+        register_setting( $design, $design, array( &$this, 'validate_input' ) );
     }
 
     /**
-     * Text element fallback.
+     * Get Option.
+     *
+     * @param  string $tab     Tab that the option belongs
+     * @param  string $id      Option ID.
+     * @param  string $default Default option.
+     *
+     * @return array           Item options.
      */
-    public function text_element_callback( $args ) {
-        $menu = $args['menu'];
-        $id = $args['id'];
-        $class = isset( $args['class'] ) ? $args['class'] : 'small-text';
+    protected function get_option( $tab, $id, $default = '' ) {
+        $options = get_option( $tab );
 
-        $options = get_option( $menu );
+        if ( isset( $options[ $id ] ) )
+            $default = $options[ $id ];
 
-        if ( isset( $options[$id] ) ) {
-            $current = $options[$id];
-        } else {
-            $current = isset( $args['default'] ) ? $args['default'] : '';
-        }
+        return $default;
+    }
 
-        $html = sprintf( '<input type="text" id="%1$s" name="%2$s[%1$s]" value="%3$s" class="%4$s" />', $id, $menu, $current, $class );
+    /**
+     * Text field callback.
+     *
+     * @param array $args Arguments from the option.
+     *
+     * @return string Text field HTML.
+     */
+    public function callback_text( $args, $class = 'regular-text' ) {
+        $tab = $args['tab'];
+        $id  = $args['id'];
 
-        // Displays option description.
-        if ( isset( $args['description'] ) ) {
+        // Sets current option.
+        $current = esc_html( $this->get_option( $tab, $id, $args['default'] ) );
+
+        $html = sprintf( '<input type="text" id="%1$s" name="%2$s[%1$s]" value="%3$s" class="%4$s" />', $id, $tab, $current, $class );
+
+        // Displays the description.
+        if ( isset( $args['description'] ) )
             $html .= sprintf( '<p class="description">%s</p>', $args['description'] );
-        }
 
         echo $html;
     }
 
     /**
-     * Select element fallback.
+     * Select field callback.
+     *
+     * @param array $args Arguments from the option.
+     *
+     * @return string Select field HTML.
      */
-    public function select_element_callback( $args ) {
-        $menu = $args['menu'];
-        $id = $args['id'];
-        $items = $args['items'];
+    public function callback_select( $args ) {
+        $tab = $args['tab'];
+        $id  = $args['id'];
 
-        $options = get_option( $menu );
+        // Sets current option.
+        $current = $this->get_option( $tab, $id, $args['default'] );
 
-        if ( isset( $options[$id] ) ) {
-            $current = $options[$id];
-        } else {
-            $current = isset( $args['default'] ) ? $args['default'] : '';
-        }
-
-        $html = sprintf( '<select id="%1$s" name="%2$s[%1$s]">', $id, $menu );
-        foreach( $items as $key => $label ) {
+        $html = sprintf( '<select id="%1$s" name="%2$s[%1$s]">', $id, $tab );
+        foreach( $args['options'] as $key => $label ) {
             $key = sanitize_title( $key );
 
             $html .= sprintf( '<option value="%s"%s>%s</option>', $key, selected( $current, $key, false ), $label );
         }
         $html .= '</select>';
 
-        // Displays option description.
-        if ( isset( $args['description'] ) ) {
+        // Displays the description.
+        if ( isset( $args['description'] ) )
             $html .= sprintf( '<p class="description">%s</p>', $args['description'] );
-        }
 
         echo $html;
     }
 
     /**
-     * Select element fallback.
+     * Checkbox cards field callback.
+     *
+     * @param array $args Arguments from the option.
+     *
+     * @return string Checkbox cards field HTML.
      */
-    public function checkbox_cards_element_callback( $args ) {
-        $menu = $args['menu'];
+    public function callback_checkbox_cards( $args ) {
+        $tab = $args['tab'];
         $id = $args['id'];
-        $items = $args['items'];
-
-        $options = get_option( $menu );
 
         $count = 0;
         $html = '';
-        foreach( $items as $key => $label ) {
-            $item_name = $menu . '[' . $count . ']';
+        foreach ( $args['options'] as $key => $label ) {
 
             // Sets current option.
-            if ( isset( $options[$count] ) ) {
-                $current = $options[$count];
-            } else {
-                $current = isset( $args['default'] ) ? $args['default'] : '';
-            }
+            $current = $this->get_option( $tab, $count );
 
             $html .= '<div class="card-item">';
-            $html .= sprintf( '<input type="checkbox" id="%2$s-%4$s" name="%1$s" value="%4$s"%3$s />', $item_name, $menu, checked( $current, $key, false ), $key );
-            $html .= sprintf( '<label for="%s-%s"> <div class="card-icons card-%s"></div></label>', $menu, $key, $label );
-            $html .= '<br style="clear: both;" /></div>';
+            $html .= sprintf( '<input type="checkbox" id="%2$s-%4$s" name="%2$s[%1$s]" value="%4$s"%3$s />', $count, $tab, checked( $current, $key, false ), $key );
+            $html .= sprintf( '<label for="%s-%s"> <div class="card-icons card-%s"></div></label>', $tab, $key, $label );
+            $html .= '<div style="clear: both;"></div>';
+            $html .= '</div>';
 
             $count++;
         }
 
         // Displays option description.
-        if ( isset( $args['description'] ) ) {
+        if ( isset( $args['description'] ) )
             $html .= sprintf( '<p class="description">%s</p>', $args['description'] );
-        }
 
         echo $html;
     }
 
     /**
-     * Color element fallback.
-     */
-    function color_element_callback( $args ) {
-        $menu = $args['menu'];
-        $id = $args['id'];
-
-        $options = get_option( $menu );
-
-        if ( isset( $options[$id] ) ) {
-            $current = $options[$id];
-        } else {
-            $current = isset( $args['default'] ) ? $args['default'] : '#ffffff';
-        }
-
-        $html = sprintf( '<input type="text" id="color-%1$s" name="%2$s[%1$s]" value="%3$s" class="regular-text" style="width: 75px" />', $id, $menu, $current );
-
-        // Displays option description.
-        if ( isset( $args['description'] ) ) {
-            $html .= sprintf( '<p class="description">%s</p>', $args['description'] );
-        }
-
-        $html .= sprintf( '<div id="farbtasticbox-%s"></div>', $id );
-
-        $html .= '<script type="text/javascript">';
-            $html .= 'jQuery(document).ready(function($) {';
-                $html .= sprintf( '$("#farbtasticbox-%s").hide();', $id );
-                $html .= sprintf( '$("#farbtasticbox-%1$s").farbtastic("#color-%1$s");', $id );
-                $html .= sprintf( '$("#color-%s").click(function(){', $id );
-                    $html .= sprintf( '$("#farbtasticbox-%s").slideToggle()', $id );
-                $html .= '});';
-            $html .= '});';
-        $html .= '</script>';
-
-        echo $html;
-    }
-
-    /**
-     * Valid options.
+     * Color field callback.
      *
-     * @param  array $input options to valid.
-     * @return array        validated options.
+     * @param array $args Arguments from the option.
+     *
+     * @return string Color field HTML.
      */
-    public function validate_options( $input ) {
-        // Create our array for storing the validated options.
+    function callback_color( $args ) {
+        $this->callback_text( $args, 'wcii-color-picker' );
+    }
+
+    /**
+     * Sanitization fields callback.
+     *
+     * @param  string $input The unsanitized collection of options.
+     *
+     * @return string        The collection of sanitized values.
+     */
+    public function validate_input( $input ) {
+        // Create our array for storing the validated options
         $output = array();
 
-        // Loop through each of the incoming options.
+        // Loop through each of the incoming options
         foreach ( $input as $key => $value ) {
 
             // Check to see if the current option has a value. If so, process it.
-            if ( isset( $input[$key] ) ) {
+            if ( isset( $input[ $key ] ) )
+                $output[ $key ] = sanitize_text_field( $value );
 
-                // Strip all HTML and PHP tags and properly handle quoted strings.
-                $output[$key] = strip_tags( stripslashes( $input[$key] ) );
-            }
         }
 
-        // Return the array processing any additional functions filtered by this action.
-        return apply_filters( 'wcii_validate_input', $output, $input );
+        return $output;
     }
 }
