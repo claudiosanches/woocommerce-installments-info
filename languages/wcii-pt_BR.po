@@ -1,0 +1,300 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WooCommerce Installments Info v2.0.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2013-06-29 05:59:30+0000\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: CSL v1.x\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: includes/class-wc-installments-info.php:209
+#, php-format
+#@ wcii
+msgid " (parcel minimum of %s)"
+msgstr " (parcela mínima de %s)"
+
+#: includes/class-wc-installments-info.php:179
+#, php-format
+#@ wcii
+msgid "%s%sx%s of %s %swith interest%s"
+msgstr "%s%sx%s de %s %scom juros%s"
+
+#: includes/class-wc-installments-info.php:177
+#, php-format
+#@ wcii
+msgid "%s%sx%s of %s %swithout interest%s"
+msgstr "%s%sx%s de %s %ssem juros%s"
+
+#: includes/class-wc-installments-info-admin.php:253
+#@ wcii
+msgid "After add to cart button"
+msgstr "Depois de botão adicionar ao carrinho"
+
+#: includes/class-wc-installments-info-admin.php:225
+#: tinymce/dialog.php:108
+#@ wcii
+msgid "Amortization schedule"
+msgstr "Tabela Price"
+
+#: includes/class-wc-installments-info-admin.php:228
+#@ wcii
+msgid "Amortization schedule: See details in <a href=\"http://en.wikipedia.org/wiki/Amortization_schedule\">Wikipedia</a><br />Simple interest: See details in <a href=\"http://en.wikipedia.org/wiki/Simple_interest#Simple_interest\">Wikipedia</a>"
+msgstr "Tabela Price: Calculo usado pelo PagSeguro e outros. Veja mais detalhes na <a href=\"http://pt.wikipedia.org/wiki/Tabela_Price\">Wikipedia</a><br />Juros simples: Calculo usado pelo B!Cash. Veja mais detalhes na <a href=\"http://pt.wikipedia.org/wiki/Juro#Juros_simples\">Wikipedia</a>"
+
+#: includes/class-wc-installments-info-admin.php:251
+#@ wcii
+msgid "Before product tab"
+msgstr "Antes das abas do produto"
+
+#: includes/class-wc-installments-info-admin.php:315
+#@ wcii
+msgid "Border color"
+msgstr "Cor da borda"
+
+#: includes/class-wc-installments-info-admin.php:216
+#: tinymce/dialog.php:106
+#@ wcii
+msgid "Calculation type"
+msgstr "Tipo de calculo"
+
+#: includes/class-wc-installments-info-admin.php:294
+#@ wcii
+msgid "Center"
+msgstr "Centro"
+
+#: includes/class-wc-installments-info-admin.php:144
+#@ wcii
+msgid "Credit Card Interest Settings"
+msgstr "Configurações do juros do cartão de crédito"
+
+#: tinymce/dialog.php:7
+#@ wcii
+msgid "Credit Card Interest Table"
+msgstr "Credit Card Interest Table"
+
+#: includes/class-wc-installments-info.php:253
+#@ wcii
+msgid "Credit Card Parcels"
+msgstr "Parcelas do Cartão de Crédito"
+
+#: includes/class-wc-installments-info-admin.php:107
+#@ wcii
+msgid "Design"
+msgstr "Design"
+
+#: includes/class-wc-installments-info-admin.php:241
+#@ wcii
+msgid "Display in"
+msgstr "Mostrar em"
+
+#: includes/class-wc-installments-info-admin.php:341
+#@ wcii
+msgid "Even background"
+msgstr "Cor de fundo par"
+
+#: includes/class-wc-installments-info-admin.php:282
+#@ wcii
+msgid "Float"
+msgstr "Flutuar"
+
+#: includes/class-wc-installments-info-admin.php:203
+#: tinymce/dialog.php:102
+#@ wcii
+msgid "Interest"
+msgstr "Juros"
+
+#: includes/class-wc-installments-info.php:204
+#, php-format
+#@ wcii
+msgid "Interest of %s%s per month"
+msgstr "Juros de %s%s por mês"
+
+#: includes/class-wc-installments-info-admin.php:292
+#@ wcii
+msgid "Left"
+msgstr "Esquerda"
+
+#: includes/class-wc-installments-info-admin.php:254
+#@ wcii
+msgid "No display"
+msgstr "Em nenhum local (Usar apenas como Shortcode)"
+
+#: includes/class-wc-installments-info-admin.php:291
+#@ wcii
+msgid "None"
+msgstr "Nada"
+
+#: tinymce/dialog.php:83
+#@ wcii
+msgid "Number of parcels"
+msgstr "Número de parcelas"
+
+#: includes/class-wc-installments-info-admin.php:328
+#@ wcii
+msgid "Odd background"
+msgstr "Cor de fundo ímpar"
+
+#: tinymce/dialog.php:87
+#@ wcii
+msgid "Parcel minimum"
+msgstr "Quantidade mínima de parcelas"
+
+#: tinymce/dialog.php:98
+#@ wcii
+msgid "Parcels without interest"
+msgstr "Parcelas sem juros"
+
+#: includes/class-wc-installments-info.php:219
+#@ wcii
+msgid "Pay with: "
+msgstr "Pagar com: "
+
+#: tinymce/dialog.php:79
+#@ wcii
+msgid "Price"
+msgstr "Preço"
+
+#: includes/class-wc-installments-info-admin.php:250
+#@ wcii
+msgid "Product bottom"
+msgstr "No final da página do produto"
+
+#: includes/class-wc-installments-info-admin.php:252
+#@ wcii
+msgid "Product tab"
+msgstr "Como aba do produto"
+
+#: includes/class-wc-installments-info-admin.php:293
+#@ wcii
+msgid "Right"
+msgstr "Direita"
+
+#: includes/class-wc-installments-info-admin.php:107
+#@ wcii
+msgid "Settings"
+msgstr "Configurações"
+
+#: includes/class-wc-installments-info-admin.php:226
+#: tinymce/dialog.php:109
+#@ wcii
+msgid "Simple interest"
+msgstr "Juros simples"
+
+#: includes/class-wc-installments-info-admin.php:234
+#@ wcii
+msgid "Table Design"
+msgstr "Opções de design da tabela"
+
+#: includes/class-wc-installments-info-admin.php:275
+#@ wcii
+msgid "Table Styles"
+msgstr "Estilos da Tabela"
+
+#: includes/class-wc-installments-info-admin.php:261
+#@ wcii
+msgid "Table Title"
+msgstr "Título da tabela"
+
+#: includes/class-wc-installments-info-admin.php:309
+#@ wcii
+msgid "Value with %, px or em"
+msgstr "Valores em %, px ou em"
+
+#: includes/class-wc-installments-info-admin.php:301
+#@ wcii
+msgid "Width"
+msgstr "Largura"
+
+#: includes/class-wc-installments-info-admin.php:354
+#@ wcii
+msgid "Without interest color"
+msgstr "Sem juros cor"
+
+#: includes/class-wc-installments-info-admin.php:177
+#: tinymce/dialog.php:91
+#@ wcii
+msgid "iota"
+msgstr "Valor mínimo da parcela"
+
+#: includes/class-wc-installments-info-admin.php:44
+#: includes/class-wc-installments-info-admin.php:268
+#@ wcii
+msgid "Credit Card Installments"
+msgstr ""
+
+#: includes/class-wc-installments-info-admin.php:84
+#: includes/class-wc-installments-info-admin.php:85
+#@ wcii
+msgid "Installments Info"
+msgstr ""
+
+#: includes/class-wc-installments-info-admin.php:151
+#@ wcii
+msgid "Number of Installments"
+msgstr ""
+
+#: includes/class-wc-installments-info-admin.php:164
+#@ wcii
+msgid "Installment minimum"
+msgstr ""
+
+#: includes/class-wc-installments-info-admin.php:190
+#@ wcii
+msgid "Installments without interest"
+msgstr ""
+
+#: includes/class-wc-installments-info-admin.php:375
+#@ wcii
+msgid "Credit Cards"
+msgstr ""
+
+#. translators: plugin header field 'Name'
+#: wc-installments-info.php:0
+#@ wcii
+msgid "WooCommerce Installments Info"
+msgstr ""
+
+#. translators: plugin header field 'PluginURI'
+#. translators: plugin header field 'AuthorURI'
+#: wc-installments-info.php:0
+#@ wcii
+msgid "http://www.claudiosmweb.com/"
+msgstr ""
+
+#. translators: plugin header field 'Description'
+#: wc-installments-info.php:0
+#@ wcii
+msgid "Displays Installments Info in you WooCommerce"
+msgstr ""
+
+#. translators: plugin header field 'Author'
+#: wc-installments-info.php:0
+#@ wcii
+msgid "claudiosanches, rstancato"
+msgstr ""
+
+#. translators: plugin header field 'Version'
+#: wc-installments-info.php:0
+#@ wcii
+msgid "2.0.0"
+msgstr ""
+
+#: wc-installments-info.php:34
+#, php-format
+#@ wcii
+msgid "WooCommerce Installments Info depends on %s to work!"
+msgstr ""
+
