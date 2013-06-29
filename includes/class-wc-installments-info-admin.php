@@ -67,12 +67,10 @@ class WC_Installments_Info_Admin {
         wp_enqueue_script( 'wp-color-picker' );
 
         // Plugin scripts.
-        wp_register_script( 'wcii-admin', WC_INSTALLMENTS_INFO_URL . 'assets/js/admin.js', array(), null, 'all' );
-        wp_enqueue_script( 'wcii-admin' );
+        wp_enqueue_script( 'wcii-admin', WC_INSTALLMENTS_INFO_URL . 'assets/js/admin.js', array(), null, 'all' );
 
         // Plugin styles.
-        wp_register_style( 'wcii-styles', WC_INSTALLMENTS_INFO_URL . 'assets/css/styles.css', array(), null, 'all' );
-        wp_enqueue_style( 'wcii-styles' );
+        wp_enqueue_style( 'wcii-styles', WC_INSTALLMENTS_INFO_URL . 'assets/css/styles.css', array(), null, 'all' );
     }
 
     /**
@@ -476,20 +474,17 @@ class WC_Installments_Info_Admin {
         $tab = $args['tab'];
         $id = $args['id'];
 
-        $count = 0;
         $html = '';
         foreach ( $args['options'] as $key => $label ) {
 
             // Sets current option.
-            $current = $this->get_option( $tab, $count );
+            $current = $this->get_option( $tab, $label );
 
             $html .= '<div class="card-item">';
-            $html .= sprintf( '<input type="checkbox" id="%2$s-%4$s" name="%2$s[%1$s]" value="%4$s"%3$s />', $count, $tab, checked( $current, $key, false ), $key );
+            $html .= sprintf( '<input type="checkbox" id="%2$s-%4$s" name="%2$s[%1$s]" value="%4$s"%3$s />', $label, $tab, checked( $current, $key, false ), $key );
             $html .= sprintf( '<label for="%s-%s"> <div class="card-icons card-%s"></div></label>', $tab, $key, $label );
             $html .= '<div style="clear: both;"></div>';
             $html .= '</div>';
-
-            $count++;
         }
 
         // Displays option description.
