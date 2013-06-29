@@ -5,7 +5,7 @@
  * Description: Displays Installments Info in you WooCommerce
  * Author: claudiosanches, rstancato
  * Author URI: http://www.claudiosmweb.com/
- * Version: 1.0.0
+ * Version: 2.0.0
  * License: GPLv2 or later
  * Text Domain: wcii
  * Domain Path: /languages/
@@ -13,8 +13,9 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly.
 
-// Sets the plugin path.
+// Sets the definitions
 define( 'WC_INSTALLMENTS_INFO_PATH', plugin_dir_path( __FILE__ ) );
+define( 'WC_INSTALLMENTS_INFO_URL', plugin_dir_url( __FILE__ ) );
 
 /**
  * Load the translation.
@@ -64,5 +65,5 @@ if ( ! wcii_is_woocommerce_active() ) {
 // Include the classes.
 require_once WC_INSTALLMENTS_INFO_PATH . 'includes/class-wc-installments-info.php';
 require_once WC_INSTALLMENTS_INFO_PATH . 'includes/class-wc-installments-info-admin.php';
-$wc_installments_info_admin = new WC_Installments_Info();
+$wc_installments_info_admin = new WC_Installments_Info_Admin();
 $wc_installments_info = new WC_Installments_Info();
