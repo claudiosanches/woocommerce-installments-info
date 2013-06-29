@@ -1,0 +1,65 @@
+#wc-credit-cart-table {
+    margin-bottom: 1.5em;
+}
+
+#wc-credit-cart-table-wrap {
+    border-style: solid;
+    border-width: 1px 0 0 1px;
+}
+
+#wc-credit-cart-table-wrap .part {
+    width: 50%;
+}
+#wc-credit-cart-table-wrap .left {
+    float: left;
+}
+#wc-credit-cart-table-wrap .right {
+    float: right;
+}
+#wc-credit-cart-table-wrap .card-info {
+    border-style: solid;
+    border-width: 0 1px 1px 0;
+    display: block;
+    padding: 2px 5px;
+}
+#wc-credit-cart-table-wrap .clear {
+    clear: both;
+}
+#wc-credit-cart-table-details {
+    font-size: smaller;
+    padding: 3px 5px;
+    text-align: right;
+}
+#wc-credit-cart-table-icons strong {
+    display: block;
+    margin: 0 10px 0 0;
+    float: left;
+}
+.card-item input {
+    float: left;
+    margin-right: 10px;
+}
+.card-icons {
+    background: url('../images/sprite.png') no-repeat;
+    display: block;
+    float: left;
+    height: 25px;
+    margin: 0 10px 10px 0;
+    width: 39px;
+}
+
+.card-master {
+    background-position: 0 -52px;
+}
+.card-hypercard {
+    background-position: 0 -26px;
+}
+.card-american {
+    background-position: 0 -78px;
+}
+.card-diners {
+    background-position: 0 -130px;
+}
+.card-aura {
+    background-position: 0 -104px;
+}
