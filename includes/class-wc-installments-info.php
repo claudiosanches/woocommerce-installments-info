@@ -17,10 +17,6 @@ class WC_Installments_Info {
         // Displays the table.
         $this->table_display();
 
-        // Add Shortcode.
-        add_shortcode( 'wcii', array( &$this, 'shortcode' ) );
-        add_action( 'init', array( &$this, 'shortcode_buttons_init' ) );
-
         // Front-end scripts.
         add_action( 'wp_enqueue_scripts', array( &$this, 'front_scripts' ) );
     }
@@ -248,60 +244,6 @@ class WC_Installments_Info {
         echo '<div class="panel entry-content" id="tab-wcii">';
             $this->print_view();
         echo '</div>';
-    }
-
-    /**
-     * Table shortcode.
-     */
-    public function shortcode( $atts ) {
-        global $product;
-
-        extract(
-            shortcode_atts(
-                array(
-                    'price'               => $product->price,
-                    'installment_maximum' => $this->settings['installment_maximum'],
-                    'installment_minimum' => $this->settings['installment_minimum'],
-                    'iota'                => $this->settings['iota'],
-                    'without_interest'    => $this->settings['without_interest'],
-                    'interest'            => $this->settings['interest'],
-                    'calculation_type'    => $this->settings['calculation_type']
-                ), $atts
-            )
-        );
-
-        return $this->view( $price, $installment_maximum, $installment_minimum, $iota, $without_interest, $interest, $calculation_type );
-    }
-
-    /**
-     * Add custom buttons in TinyMCE.
-     */
-    public function shortcode_register_buttons( $buttons ) {
-        array_push( $buttons, '|', 'wcii' );
-
-        return $buttons;
-    }
-
-    /**
-     * Register button scripts.
-     */
-    public function shortcode_add_buttons( $plugin_array ) {
-        $plugin_array['wcii'] = plugins_url( 'tinymce/wcii.js' , __FILE__ );
-
-        return $plugin_array;
-    }
-
-    /**
-     * Register buttons in init.
-     */
-    public function shortcode_buttons_init() {
-        if ( ! current_user_can( 'edit_posts' ) && !current_user_can( 'edit_pages' ) )
-            return;
-
-        if ( 'true' == get_user_option( 'rich_editing') ) {
-            add_filter( 'mce_external_plugins', array( &$this, 'shortcode_add_buttons' ) );
-            add_filter( 'mce_buttons', array( &$this, 'shortcode_register_buttons' ) );
-        }
     }
 
 }

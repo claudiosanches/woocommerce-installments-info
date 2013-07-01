@@ -65,5 +65,7 @@ if ( ! wcii_is_woocommerce_active() ) {
 // Include the classes.
 require_once WC_INSTALLMENTS_INFO_PATH . 'includes/class-wc-installments-info.php';
 require_once WC_INSTALLMENTS_INFO_PATH . 'includes/class-wc-installments-info-admin.php';
+require_once WC_INSTALLMENTS_INFO_PATH . 'includes/class-wc-installments-info-shortcode.php';
 $wc_installments_info_admin = new WC_Installments_Info_Admin();
 $wc_installments_info = new WC_Installments_Info();
+$wc_installments_info_shortcode = new WC_Installments_Info_Shortcode();
