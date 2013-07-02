@@ -26,23 +26,26 @@ class WC_Installments_Info_Shortcode {
      * Table shortcode.
      */
     public function shortcode( $atts ) {
-        global $product;
+        global $product, $wc_installments_info;
+
+        // Gets the settings.
+        $settings = $wc_installments_info->settings;
 
         extract(
             shortcode_atts(
                 array(
                     'price'               => $product->price,
-                    'installment_maximum' => $this->settings['installment_maximum'],
-                    'installment_minimum' => $this->settings['installment_minimum'],
-                    'iota'                => $this->settings['iota'],
-                    'without_interest'    => $this->settings['without_interest'],
-                    'interest'            => $this->settings['interest'],
-                    'calculation_type'    => $this->settings['calculation_type']
+                    'installment_maximum' => $settings['installment_maximum'],
+                    'installment_minimum' => $settings['installment_minimum'],
+                    'iota'                => $settings['iota'],
+                    'without_interest'    => $settings['without_interest'],
+                    'interest'            => $settings['interest'],
+                    'calculation_type'    => $settings['calculation_type']
                 ), $atts
             )
         );
 
-        return $this->view( $price, $installment_maximum, $installment_minimum, $iota, $without_interest, $interest, $calculation_type );
+        return $wc_installments_info->view( $price, $installment_maximum, $installment_minimum, $iota, $without_interest, $interest, $calculation_type );
     }
 
     /**

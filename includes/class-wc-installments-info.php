@@ -127,7 +127,7 @@ class WC_Installments_Info {
      *
      * @return string                      Table with installments and interest.
      */
-    protected function view(
+    public function view(
         $price,
         $installment_maximum,
         $installment_minimum,
