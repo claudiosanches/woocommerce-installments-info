@@ -26,7 +26,7 @@ class WC_Installments_Info {
      */
     public function front_scripts() {
         if ( is_product() )
-            wp_enqueue_style( 'wcii-styles', WC_INSTALLMENTS_INFO_URL . 'assets/css/styles.css', array(), null, 'all' );
+            wp_enqueue_style( 'wcii-styles', WC_INSTALLMENTS_INFO_URL . 'assets/css/wcii.css', array(), null, 'all' );
     }
 
     /**
@@ -149,15 +149,15 @@ class WC_Installments_Info {
                 $middle = ceil( count( $values ) / 2 );
 
                 // Open the table.
-                $table .= '<div id="wc-credit-cart-table" class="clear" style="width: ' . $this->design['width'] . ';' . $align . ';">';
+                $table .= '<div id="wcii-table" style="width: ' . $this->design['width'] . ';' . $align . ';">';
 
                 if ( 2 != $this->design['display'] )
                     $table .= '<h3>' . $this->design['title'] . '</h3>';
 
                 // Border wrapper.
-                $table .= '<div id="wc-credit-cart-table-wrap" style="border-color:' . $this->design['border'] . ';">';
+                $table .= '<div id="wcii-table-wrap" style="border-color:' . $this->design['border'] . ';">';
 
-                $table .= '<div class="part left">';
+                $table .= '<div class="side left-side">';
 
                 // Displays the installments.
                 foreach ( $values as $key => $value ) {
@@ -173,7 +173,7 @@ class WC_Installments_Info {
 
                     // Divides the table.
                     if ( $key == $middle )
-                        $table .= '</div><div class="part right">';
+                        $table .= '</div><div class="side right-side">';
                 }
 
                 $table .= '</div>';
@@ -183,7 +183,7 @@ class WC_Installments_Info {
                 $table .= '</div>';
 
                 // Details.
-                $table .= '<div id="wc-credit-cart-table-details">';
+                $table .= '<div id="wcii-table-details">';
 
                 // Show interest info.
                 if ( $without_interest < $installment_maximum )
@@ -202,7 +202,7 @@ class WC_Installments_Info {
                 // Display credit card icons.
                 // if ( $icons != '' ) {
 
-                //     $table .= '<div id="wc-credit-cart-table-icons">';
+                //     $table .= '<div id="wcii-table-icons">';
                 //     $table .= '<strong>' . __( 'Pay with: ', 'wcii' ) . '</strong>';
 
                 //     foreach ( $icons as $key => $value ) {

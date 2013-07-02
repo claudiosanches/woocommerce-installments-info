@@ -70,7 +70,7 @@ class WC_Installments_Info_Admin {
         wp_enqueue_script( 'wcii-admin', WC_INSTALLMENTS_INFO_URL . 'assets/js/admin.js', array(), null, 'all' );
 
         // Plugin styles.
-        wp_enqueue_style( 'wcii-styles', WC_INSTALLMENTS_INFO_URL . 'assets/css/styles.css', array(), null, 'all' );
+        wp_enqueue_style( 'wcii-styles', WC_INSTALLMENTS_INFO_URL . 'assets/css/wcii.css', array(), null, 'all' );
     }
 
     /**
