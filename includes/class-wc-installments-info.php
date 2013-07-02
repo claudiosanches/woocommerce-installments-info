@@ -71,6 +71,22 @@ class WC_Installments_Info {
     }
 
     /**
+     * Gets the icons
+     *
+     * @return array Icons.
+     */
+    protected function get_icons() {
+        $icons[] = isset( $this->design['visa'] ) ? $this->design['visa'] : '';
+        $icons[] = isset( $this->design['master'] ) ? $this->design['master'] : '';
+        $icons[] = isset( $this->design['hypercard'] ) ? $this->design['hypercard'] : '';
+        $icons[] = isset( $this->design['american'] ) ? $this->design['american'] : '';
+        $icons[] = isset( $this->design['diners'] ) ? $this->design['diners'] : '';
+        $icons[] = isset( $this->design['aura'] ) ? $this->design['aura'] : '';
+
+        return $icons;
+    }
+
+    /**
      * Installment calculator.
      *
      * @param  float  $price               Product price.
@@ -137,6 +153,7 @@ class WC_Installments_Info {
         $calculation_type ) {
 
         $table = '';
+        $icons = array_filter( $this->get_icons() );
 
         if ( ! empty( $price ) ) {
             $values = $this->installment_calculator( $price, $installment_maximum, $installment_minimum, $iota, $without_interest, $interest, $calculation_type );
@@ -196,23 +213,22 @@ class WC_Installments_Info {
                 // Close the details.
                 $table .= '</div>';
 
+                // Display credit card icons.
+                if ( ! empty( $icons ) ) {
+
+                    $table .= '<div id="wcii-table-icons">';
+                    $table .= '<strong>' . __( 'Pay with: ', 'wcii' ) . '</strong>';
+
+                    foreach ( $icons as $value ) {
+                        $table .= '<span class="card-icons card-' . $value . '"></span>';
+                    }
+
+                    $table .= '<div class="clear"></div>';
+                    $table .= '</div>';
+                }
+
                 // Close the table.
                 $table .= '</div>';
-
-                // Display credit card icons.
-                // if ( $icons != '' ) {
-
-                //     $table .= '<div id="wcii-table-icons">';
-                //     $table .= '<strong>' . __( 'Pay with: ', 'wcii' ) . '</strong>';
-
-                //     foreach ( $icons as $key => $value ) {
-                //         $table .= sprintf( '<span class="card-icons card-%s"></span>', $value );
-                //     }
-
-                //     $table .= '<div class="clear"></div>';
-                //     $table .= '</div>';
-                // }
-
             }
         }
 
