@@ -69,3 +69,14 @@ require_once WC_INSTALLMENTS_INFO_PATH . 'includes/class-wc-installments-info-sh
 $wc_installments_info_admin = new WC_Installments_Info_Admin();
 $wc_installments_info = new WC_Installments_Info();
 $wc_installments_info_shortcode = new WC_Installments_Info_Shortcode();
+
+/**
+ * Gets the table.
+ *
+ * @return string The table in HTML.
+ */
+function wcii_get_table() {
+    global $wc_installments_info;
+
+    $wc_installments_info->print_view();
+}
