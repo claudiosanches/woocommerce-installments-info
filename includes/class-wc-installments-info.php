@@ -35,17 +35,23 @@ class WC_Installments_Info {
      * @return void
      */
     protected function table_display() {
-        if ( 0 == $this->design['display'] ) {
-            add_action( 'woocommerce_after_single_product_summary', array( &$this, 'print_view' ), 50 );
+        switch ( $this->design['display'] ) {
+            case 0:
+                add_action( 'woocommerce_after_single_product_summary', array( &$this, 'print_view' ), 50 );
+                break;
+            case 1:
+                add_action( 'woocommerce_after_single_product_summary', array( &$this, 'print_view' ), 1 );
+                break;
+            case 2:
+                add_filter( 'woocommerce_product_tabs', array( &$this, 'add_tab' ) );
+                break;
+            case 3:
+                add_action( 'woocommerce_single_product_summary', array( &$this, 'print_view' ), 35 );
+                break;
 
-        } else if ( 1 == $this->design['display'] ) {
-            add_action( 'woocommerce_after_single_product_summary', array( &$this, 'print_view' ), 1 );
-
-        } else if ( 2 == $this->design['display'] ) {
-            add_action( 'woocommerce_product_tabs', array( &$this, 'tab_view' ), 60 );
-            add_action( 'woocommerce_product_tab_panels', array( &$this, 'display_tab_view' ), 60 );
-        } else if ( 3 == $this->design['display'] ) {
-            add_action( 'woocommerce_single_product_summary', array( &$this, 'print_view' ), 35 );
+            default:
+                // Pass.
+                break;
         }
     }
 
@@ -199,19 +205,20 @@ class WC_Installments_Info {
                 $table .= '<div class="clear"></div>';
                 $table .= '</div>';
 
-                // Details.
-                $table .= '<div id="wcii-table-details">';
+                // Installments information.
+                if ( $this->design['information'] ) {
+                    $table .= '<div id="wcii-table-information">';
 
-                // Show interest info.
-                if ( $without_interest < $installment_maximum )
-                    $table .= '<span>' . sprintf( __( 'Interest of %s%s per month', 'wcii' ), $this->number_format( $interest ), '%' ) . '</span>';
+                    // Show interest info.
+                    if ( $without_interest < $installment_maximum )
+                        $table .= '<span>' . sprintf( __( 'Interest of %s%s per month', 'wcii' ), $this->number_format( $interest ), '%' ) . '</span>';
 
-                // Show maximum installment info.
-                if ( $iota > 0 )
-                    $table .= '<span>' . sprintf( __( ' (installment minimum of %s)', 'wcii' ), woocommerce_price( $iota ) ) . '</span>';
+                    // Show maximum installment info.
+                    if ( $iota > 0 )
+                        $table .= '<span>' . sprintf( __( ' (installment minimum of %s)', 'wcii' ), woocommerce_price( $iota ) ) . '</span>';
 
-                // Close the details.
-                $table .= '</div>';
+                    $table .= '</div>';
+                }
 
                 // Display credit card icons.
                 if ( ! empty( $icons ) ) {
@@ -247,19 +254,14 @@ class WC_Installments_Info {
     /**
      * Create a new tab.
      */
-    public function tab_view() {
-        echo '<li class="wcii_tab"><a href="#tab-wcii">' . apply_filters( 'installments_info_tab_title' , __( 'Credit Card Installments', 'wcii' ) ) . '</a></li>';
-    }
+    public function add_tab( $tabs ) {
+        $tabs['installments_info_table'] = array(
+            'title'    => $this->design['title'],
+            'priority' => 60,
+            'callback' => array( &$this, 'print_view' )
+        );
 
-    /**
-     * Display tab content.
-     */
-    public function display_tab_view() {
-        global $product;
-
-        echo '<div class="panel entry-content" id="tab-wcii">';
-            $this->print_view();
-        echo '</div>';
+        return $tabs;
     }
 
 }

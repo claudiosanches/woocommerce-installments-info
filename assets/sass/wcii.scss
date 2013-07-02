@@ -34,16 +34,21 @@
     }
 }
 
-#wcii-table-details {
+#wcii-table-information {
     font-size: smaller;
     padding: 3px 5px;
     text-align: right;
 }
 
-#wcii-table-icons strong {
-    display: block;
-    margin: 0 10px 0 0;
-    float: left;
+#wcii-table-icons {
+    @include pie-clearfix;
+    margin-top: 10px;
+
+    strong {
+        display: block;
+        margin: 0 10px 0 0;
+        float: left;
+    }
 }
 
 .card-item input {

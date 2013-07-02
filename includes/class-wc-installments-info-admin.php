@@ -153,7 +153,7 @@ class WC_Installments_Info_Admin {
             array(
                 'tab' => $settings,
                 'id' => 'installment_maximum',
-                'default' => '12'
+                'default' => 12
             )
         );
 
@@ -166,7 +166,7 @@ class WC_Installments_Info_Admin {
             array(
                 'tab' => $settings,
                 'id' => 'installment_minimum',
-                'default' => '1'
+                'default' => 1
             )
         );
 
@@ -179,7 +179,7 @@ class WC_Installments_Info_Admin {
             array(
                 'tab' => $settings,
                 'id' => 'iota',
-                'default' => '5'
+                'default' => 5
             )
         );
 
@@ -192,7 +192,7 @@ class WC_Installments_Info_Admin {
             array(
                 'tab' => $settings,
                 'id' => 'without_interest',
-                'default' => '1'
+                'default' => 1
             )
         );
 
@@ -218,10 +218,10 @@ class WC_Installments_Info_Admin {
             array(
                 'tab' => $settings,
                 'id' => 'calculation_type',
-                'default' => '0',
+                'default' => 0,
                 'options' => array(
-                    '0' => __( 'Amortization schedule', 'wcii' ),
-                    '1' => __( 'Simple interest', 'wcii' ),
+                    0 => __( 'Amortization schedule', 'wcii' ),
+                    1 => __( 'Simple interest', 'wcii' ),
                 ),
                 'description' => __( 'Amortization schedule: See details in <a href="http://en.wikipedia.org/wiki/Amortization_schedule">Wikipedia</a><br />Simple interest: See details in <a href="http://en.wikipedia.org/wiki/Simple_interest#Simple_interest">Wikipedia</a>', 'wcii' )
             )
@@ -243,13 +243,30 @@ class WC_Installments_Info_Admin {
             array(
                 'tab' => $design,
                 'id' => 'display',
-                'default' => '0',
+                'default' => 0,
                 'options' => array(
-                    '0' => __( 'Product bottom', 'wcii' ),
-                    '1' => __( 'Before product tab', 'wcii' ),
-                    '2' => __( 'Product tab', 'wcii' ),
-                    '3' => __( 'After add to cart button', 'wcii' ),
-                    '4' => __( 'No display', 'wcii' ),
+                    __( 'Product bottom', 'wcii' ),
+                    __( 'Before product tab', 'wcii' ),
+                    __( 'Product tab', 'wcii' ),
+                    __( 'After add to cart button', 'wcii' ),
+                    __( 'No display', 'wcii' ),
+                )
+            )
+        );
+
+        add_settings_field(
+            'information',
+            __( 'Installments information', 'wcii' ),
+            array( &$this , 'callback_select' ),
+            $design,
+            'wcii_table_design_section',
+            array(
+                'tab' => $design,
+                'id' => 'information',
+                'default' => 1,
+                'options' => array(
+                    __( 'Not display', 'wcii' ),
+                    __( 'Display', 'wcii' )
                 )
             )
         );
